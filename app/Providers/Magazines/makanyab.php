@@ -57,7 +57,6 @@ class makanyab extends Magazine{
     }
     public function local($u){ 
      
-        
         $send=new editMessageText([
             'chat_id'=>$this->update->callback_query->message->chat->id,
             'message_id'=>$u->callback_query->message->message_id,
@@ -69,8 +68,9 @@ class makanyab extends Magazine{
          
     }
 
-    public function lastplace($u){
-        if (empty($this->meet["lastid"])){
+    public function lastplace($u){  
+      
+       if (empty($this->detect->data->cor)){
        $this->meet["lastid"]=$this->detect->data->lastid;}
         $send=new editMessageText([
             'chat_id'=>$this->update->callback_query->message->chat->id,
@@ -227,35 +227,37 @@ class makanyab extends Magazine{
     }
 
    
-    public function kaygnttwo(){
+    // public function kaygnttwo(){
 
-        $data=\App\locations::get();
-        $keys=[];
-        $local=\App\locations::pluck('local')->toArray();
-        $a=[];
-         for($i=0;$i<10;$i++){
-          
-            $lastid=$this->detect->data->lastid;    
-            $keys[]=[
-                    [
-                        "text"=>$data[$i]->local,
-                        "callback_data"=>interlink([
-                            "id"=>$data[$i]->id,
-                            "path"=>"makanyab@local"
-                        ])
-                    ]
-                ];  
-        } 
+    //     $data=\App\locations::get();
+    //     $keys=[];
+    //     $local=\App\locations::pluck('local')->toArray();
+    //     $a=[]; 
+    //      for($i=0;$i<10;$i++){
+           
+    //         $lastid=$this->detect->data->lastid;  
+    //         $keys[]=[
+    //                 [
+    //                     "text"=>$data[$i]->local,
+    //                     "callback_data"=>interlink([
+    //                         "id"=>$data[$i]->id,
+    //                         "path"=>"makanyab@local"
+    //                     ])
+    //                 ]
+    //             ];  
+    //     } 
        
-        return json_encode(["inline_keyboard"=> $keys ]);
+    //     return json_encode(["inline_keyboard"=> $keys ]);
         
-    }
+    // }
 
     public function kaygntthree(){
         
                 $data=\App\locations::get();
                 $keys=[];
                 $local=\App\locations::pluck('local')->toArray();
+                $id=$this->detect->data->id;
+                $parentID=\App\places::find($id)->parentID;
                 $a=[];
                 if(count($data)%2==0){   
                  for($i=0;$i<count($data)-1;$i+=2){
@@ -321,8 +323,7 @@ class makanyab extends Magazine{
                                         "lastid"=>$this->detect->data->id,
                             ])
                             ]
-                            ];$id=$this->detect->data->id;
-                              $parentID=\App\places::find($id)->parentID;
+                            ];
                                 $keys[]=[
                                     [
                                 
@@ -342,20 +343,22 @@ class makanyab extends Magazine{
                                     ])
                                     ],
                                 ];
-                            } 
+                            }
+   
+        
                 return json_encode(["inline_keyboard"=> $keys ]);
                 
             }
-    public function kaygntfour(){
+    public function kaygntfour(){   
+    $data=\App\places::get();        
     $parentID=\App\places::pluck('parentID')->toArray();
     $idplace=$this->meet["lastid"];
-    $data=\App\places::get();
     $dataplc=\App\places::find($idplace);
    if (empty($this->detect->data->loc)){
     $idlocation=$this->detect->data->id;}
     else{$idlocation=$this->detect->data->loc;}
     $y=0;$maxzan=[];$a=0;$finalplace=[];$keys=[];
-    for($i=0;$i<24;$i++){
+    for($i=0;$i<=24;$i++){
         if ($parentID[$i]==$idplace)
         { 
             $maxzan[$y]=$data[$i]->id;
@@ -416,8 +419,8 @@ class makanyab extends Magazine{
                     
                     "text"=>"back one step",
                     "callback_data"=>interlink([
-                        "text"=>"back",
                         "path"=>"makanyab@local",
+                        "id"=>$data->find($maxzan[0])->parentID,
                     ])
                     ],   
                 ];
@@ -458,7 +461,7 @@ class makanyab extends Magazine{
                       "text"=>"back one step",
                       "callback_data"=>interlink([
                           "path"=>"makanyab@local",
-                          "id"=>$data[$maxzan[0]]->parentID,
+                          "id"=>$data->find($maxzan[0])->parentID,
                       ])
                       ],   
                 ];
@@ -487,6 +490,7 @@ public function kaygntfive(){
           "callback_data"=>interlink([
               "path"=>"makanyab@lastplace",
               "loc"=>$locationID,
+              "cor"=>"1",
           ])
           ],   
     ];
