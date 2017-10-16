@@ -14,10 +14,10 @@ class locationTableSeeder extends Seeder
          $mantaghe=["باجک","نیروگاه","آذر","جمهوری","حرم","آزادگان","نبوت","سالاریه","بلوار امین","صفاییه "];
         $fake=\Faker\Factory::create('fa_IR');
             for ($i=0; $i < 11; $i++) { 
-            $local=array_rand($mantaghe);$a=$mantaghe[$local];
+            $local=$mantaghe[$i];
 	    	DB::table('locations')->insert([
                 'parentID'=>rand(1,4),
-                'local'=>"$a",
+                'local'=>"$local",
 	        ]);
     }
 }

@@ -35,10 +35,9 @@ class makanyab extends Magazine{
     
 
     public function searchplace($u){
-       
     $count=$this->detect->data->count;
         $id=$this->detect->data->id;
-        $text=\App\places::find($id)->place; 
+        $text=\App\categories::find($id)->Category; 
         for($j=0;$j<=$count;$j++) {
             if ($this->detect->data->id==$j)
             { 
@@ -101,20 +100,20 @@ class makanyab extends Magazine{
 
     }
     public function kaygnt(){
-        $data=\App\places::get();
         $keys=[];
-        $parentID=\App\places::pluck('parentID')->toArray();
+        $data=\App\categories::get();
+        $parentID=\App\categories::pluck('parentID')->toArray();
         $a=[];
         for($i=0;$i<11;$i++){
             if ($parentID[$i]==0)
             {
                 $keys[]=[
                     [
-                        "text"=>$data[$i]->place,
+                        "text"=>$data[$i]->Category,
                         "callback_data"=>interlink([
                             "id"=>$data[$i]->id,
                             "path"=>"makanyab@searchplace",
-                            "count"=>\App\places::where("parentID",0)->count()
+                            "count"=>\App\categories::where("parentID",0)->count()
                         ])
                     ]
                 ];
@@ -126,13 +125,13 @@ class makanyab extends Magazine{
     }
     
     public function kaygntone(){
-        $data=\App\places::get();
-        $parentID=\App\places::pluck('parentID')->toArray();
+        $data=\App\categories::get();
+        $parentID=\App\categories::pluck('parentID')->toArray();
         $keys=[];
         $a=[];
         $maxzan=[];$y=1;
         $j=$this->detect->data->id;
-         for($i=0;$i<24;$i++){
+         for($i=0;$i<count($data);$i++){
              if ($parentID[$i]==$j)
            { 
                $maxzan[$y]=$data[$i]->id;
@@ -141,13 +140,12 @@ class makanyab extends Magazine{
               
         }
         $count=count($maxzan); 
-         if($count%2==0){
+         if($count%2==0){ 
             for($r=1;$r<=count($maxzan)-1;$r+=2){
-                
+              //echo($data[$maxzan[$r]-1]->Category); 
                 $keys[]=[
                         [
-                            
-                            "text"=>$data[$maxzan[$r]-1]->place,
+                            "text"=>$data[$maxzan[$r]-1]->Category,
                             "callback_data"=>interlink([
                                 "id"=>$data[$maxzan[$r]-1]->id,
                                 "path"=>"makanyab@local"
@@ -156,7 +154,7 @@ class makanyab extends Magazine{
                         ],
                         [
                                 
-                            "text"=>$data[$maxzan[$r+1]-1]->place,
+                            "text"=>$data[$maxzan[$r+1]-1]->Category,
                             "callback_data"=>interlink([
                                 "id"=>$data[$maxzan[$r+1]-1]->id,
                                 "path"=>"makanyab@local"
@@ -176,14 +174,14 @@ class makanyab extends Magazine{
                   ]
                   ];
             }
-            if($count%2==1){
+            if($count%2==1){ 
                  
                 for($r=1;$r<=count($maxzan)-2;$r+=2){
-                    
+                  //  dd($data[$maxzan[$r]-1]->Category);
                         $keys[]=[
                                 [
                                     
-                                    "text"=>$data[$maxzan[$r]-1]->place,
+                                    "text"=>$data[$maxzan[$r]-1]->Category,
                                     "callback_data"=>interlink([
                                         "id"=>$data[$maxzan[$r]-1]->id,
                                         "path"=>"makanyab@local"
@@ -192,7 +190,7 @@ class makanyab extends Magazine{
                                 ],
                                     [
                                         
-                                    "text"=>$data[$maxzan[$r+1]-1]->place,
+                                    "text"=>$data[$maxzan[$r+1]-1]->Category,
                                     "callback_data"=>interlink([
                                         "id"=>$data[$maxzan[$r+1]-1]->id,
                                         "path"=>"makanyab@local"
@@ -203,7 +201,7 @@ class makanyab extends Magazine{
                 }
                             $keys[]=[
                                 [
-                                "text"=>$data[$maxzan[count($maxzan)]-1]->place,
+                                "text"=>$data[$maxzan[count($maxzan)]-1]->Category,
                                 "callback_data"=>interlink([
                                     "id"=>$data[$maxzan[count($maxzan)]-1]->id,
                                     "path"=>"makanyab@local"
@@ -226,38 +224,13 @@ class makanyab extends Magazine{
         
     }
 
-   
-    // public function kaygnttwo(){
-
-    //     $data=\App\locations::get();
-    //     $keys=[];
-    //     $local=\App\locations::pluck('local')->toArray();
-    //     $a=[]; 
-    //      for($i=0;$i<10;$i++){
-           
-    //         $lastid=$this->detect->data->lastid;  
-    //         $keys[]=[
-    //                 [
-    //                     "text"=>$data[$i]->local,
-    //                     "callback_data"=>interlink([
-    //                         "id"=>$data[$i]->id,
-    //                         "path"=>"makanyab@local"
-    //                     ])
-    //                 ]
-    //             ];  
-    //     } 
-       
-    //     return json_encode(["inline_keyboard"=> $keys ]);
-        
-    // }
-
     public function kaygntthree(){
         
                 $data=\App\locations::get();
                 $keys=[];
                 $local=\App\locations::pluck('local')->toArray();
                 $id=$this->detect->data->id;
-                $parentID=\App\places::find($id)->parentID;
+                $parentID=\App\categories::find($id)->parentID;
                 $a=[];
                 if(count($data)%2==0){   
                  for($i=0;$i<count($data)-1;$i+=2){
@@ -338,7 +311,7 @@ class makanyab extends Magazine{
                                     "text"=>"back one step",
                                     "callback_data"=>interlink([
                                         "path"=>"makanyab@searchplace",
-                                        "count"=>\App\places::where("parentID",0)->count(),
+                                        "count"=>\App\categories::where("parentID",0)->count(),
                                         "id"=>$parentID,
                                     ])
                                     ],
@@ -358,7 +331,7 @@ class makanyab extends Magazine{
     $idlocation=$this->detect->data->id;}
     else{$idlocation=$this->detect->data->loc;}
     $y=0;$maxzan=[];$a=0;$finalplace=[];$keys=[];
-    for($i=0;$i<=24;$i++){
+    for($i=0;$i<count($data);$i++){
         if ($parentID[$i]==$idplace)
         { 
             $maxzan[$y]=$data[$i]->id;
