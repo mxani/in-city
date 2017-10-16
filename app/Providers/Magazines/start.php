@@ -28,8 +28,30 @@ class start extends Magazine {
 			'parse_mode'   => 'html',
 			'reply_markup' => json_encode( [
 				'keyboard'          => [
-     				[ 'جستجو مکان' ],
+					 [ 'جستجو مکان' ],
+					 [ 'ثبت مکان' ],
 					[ 'درباره ربات' ],
+				],
+				'resize_keyboard'   => true,
+				'one_time_keyboard' => true,
+			] ),
+		] );
+	
+		if ( ! $send() ) {
+			\Storage::append( 'updates/last.json', "error: " . $send->getError() );
+		}
+
+	}
+	public function registerplace( $u ){
+		$send = new sendMessage( [
+			'chat_id'      => $u->message->chat->id,
+			'text'         => "یکی رو انتخاب کن",
+			'parse_mode'   => 'html',
+			'reply_markup' => json_encode( [
+				'keyboard'          => [
+					
+					 [ ' ثبت مکان جدید' ],
+					[ 'ویرایش مکان' ],
 				],
 				'resize_keyboard'   => true,
 				'one_time_keyboard' => true,
