@@ -84,14 +84,15 @@ class makanyab extends Magazine{
     public function placeinfo($u){
        $id=$this->detect->data->id;
        $data=\App\places::where("id", $id=$this->detect->data->id)->get()->first();
-       $text="<b>place:</b> $data->place
-      <b>phone:</b> $data->phone
-      <b>adress:</b>$data->adress
-      <b>webpage:</b>$data->webpage";
+       $text="<a href=\"$data->pic\">&#8205;</a>\n ".
+            "place:". $data->place."\n".
+            "phone:".$data->phone."\n".
+            "adress:".$data->adress."\n".
+            "webpage:".$data->webpage;
        $send=new editMessageText([
         'chat_id'=>$this->update->callback_query->message->chat->id,
         'message_id'=>$u->callback_query->message->message_id,
-        'text'=> "$text",
+        'text'=>$text ,
         'parse_mode'=>'html',
         'reply_markup'=> $this->kaygntfive(),
         

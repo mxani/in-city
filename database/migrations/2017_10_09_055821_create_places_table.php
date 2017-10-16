@@ -21,6 +21,7 @@ class CreatePlacesTable extends Migration
             $table->string('phone');
             $table->string('adress');
             $table->string('webpage');
+            $table->string('pic');
             $table->string('tag');
             $table->string('sign');
             $table->rememberToken();

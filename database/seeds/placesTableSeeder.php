@@ -23,6 +23,7 @@ class placesTableSeeder extends Seeder
                 'phone' => $fake->phonenumber,
                 'adress' =>$fake->address,
                 'webpage' =>$fake->url,
+                'pic'=>$fake->image,
                 'tag' =>$fake->company,
                 'sign' => $fake->company,
             ]);
