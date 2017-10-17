@@ -35,7 +35,7 @@ class sabtemakan extends Magazine{
                     
                     ]);
                 $send();
-                $this->meet["placename"]=1;
+                 $this->meet["placename"]=1;
             }
 
         }
@@ -52,18 +52,38 @@ class sabtemakan extends Magazine{
         
     }
     
-    public function namereg($u){
+    public function namereg($u){ 
+ 
       if ($this->meet["placename"]==1){ 
-       $recorde[1]=$u->message->text;
+      $this->meet["recorde[1]"]=$u->message->text;
        $send=new sendMessage([
         'chat_id'=>$this->update->message->chat->id,
-        'text'=> "شماره تلفن".$recorde[1]." را وارد کنید  ",
+        'text'=>  "شماره تلفن" . $this->meet["recorde[1]"]." را وارد کنید  ",
         'parse_mode'=>'html',
        
         ]);
     $send();
     $this->meet["placename"]=2;
       }
+    }
+
+    public function phonereg($u){
+
+        if ($this->meet["placename"]==2){ 
+            $this->meet["recorde[2]"]=$u->message->text;
+             $send=new sendMessage([
+              'chat_id'=>$this->update->message->chat->id,
+              'text'=> "آدرس" .$this->meet["recorde[1]"]. "واردکنید",
+              'parse_mode'=>'html',
+             
+              ]);
+          $send();
+          $this->meet["placename"]=3;
+            }
+            \App\places::insert(
+                ['locations_id'=>'1','parentID'=>'13','place' =>$this->meet["recorde[1]"] , 'phone' =>$this->meet["recorde[2]"],'adress'=>'huk','webpage'=>'jghg','pic'=>'hugu','tag'=>'jhg','sign'=>'gygy']
+            );    
+
     }
     public function kaygnt(){
         $keys=[];

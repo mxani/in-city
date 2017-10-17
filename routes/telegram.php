@@ -25,6 +25,10 @@ $this->trigger(function(&$u){//dd($this->meet["placename"]);
     return !empty($u->message->text) && !empty($this->meet["placename"]) && $this->meet["placename"]==1;
    },'sabtemakan@namereg');
 
+   $this->trigger(function(&$u){//dd($this->meet["placename"]);
+    return !empty($u->message->text) && !empty($this->meet["placename"]) && $this->meet["placename"]==2;
+   },'sabtemakan@phonereg');
+
 if (!empty($this->detect->data->path)){
     $this->trigger(function($u){ return true ;},$this->detect->data->path);
 
