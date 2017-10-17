@@ -21,9 +21,9 @@ $this->trigger(function(&$u){
 return !empty($u->message->text) && $u->message->text=='ثبت مکان جدید';
 },'sabtemakan@regplace');
 
-// $this->trigger(function(&$u){ 
-//     return !empty($u->message->text) && !empty($this->meet["placename"]) && $this->meet["placename"]==1;
-//    },'sabtemakan@namereg');
+$this->trigger(function(&$u){//dd($this->meet["placename"]);
+    return !empty($u->message->text) && !empty($this->meet["placename"]) && $this->meet["placename"]==1;
+   },'sabtemakan@namereg');
 
 if (!empty($this->detect->data->path)){
     $this->trigger(function($u){ return true ;},$this->detect->data->path);

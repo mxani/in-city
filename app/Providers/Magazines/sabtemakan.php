@@ -10,27 +10,23 @@ use XB\telegramMethods\editMessageReplyMarkup;
 class sabtemakan extends Magazine{
 
     public function regplace($u){
-        
+      
         if (empty($this->update->message->chat->id))
         {  
-            $data=\App\categories::get();
-            $parentID=\App\categories::pluck('parentID')->toArray();
-            $id=$this->detect->data->id;
-            for($i=0;$i<count($data);$i++){
-                $y=0;
-                if ($parentID[$i]==$id){ 
-
+           $data=\App\categories::get();
+           $parentID=\App\categories::pluck('parentID')->toArray();
+           $id=$this->detect->data->id;
+           if(!empty(array_search($id,$parentID))){
             $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,
                 'message_id'=>$this->update->callback_query->message->message_id,
-                'text'=>" مکان مورد نظر شما در کدام دسته جای دارد ",
+                'text'=>"مکان مورد نظر شما در کدام دسته جای دارد ",
                 'parse_mode'=>'html',
                 'reply_markup'=> $this->kaygnt(),
                 ]);
             $send();
-            $y=1;
-        } 
-         elseif($y=0){
+            }
+            else{
                 $send=new editMessageText([
                     'chat_id'=>$this->update->callback_query->message->chat->id,
                     'message_id'=>$this->update->callback_query->message->message_id,
@@ -39,21 +35,22 @@ class sabtemakan extends Magazine{
                     
                     ]);
                 $send();
-              //  $this->meet["placename"]=0;
+                $this->meet["placename"]=1;
             }
 
         }
-    }
+    
         if(!empty($this->update->message->chat->id)){ 
         $send=new sendMessage([
             'chat_id'=>$this->update->message->chat->id,
-            'text'=> " مکان مورد نظر شما در کدام دسته جای دارد  ",
+            'text'=> "xarrr"." مکان مورد نظر شما در کدام دسته جای دارد  ",
             'parse_mode'=>'html',
             'reply_markup'=> $this->kaygnt(),
             ]);
         $send();
          }
-        }
+        
+    }
     
     public function namereg($u){
       if ($this->meet["placename"]==1){ 
@@ -62,10 +59,10 @@ class sabtemakan extends Magazine{
         'chat_id'=>$this->update->message->chat->id,
         'text'=> "شماره تلفن".$recorde[1]." را وارد کنید  ",
         'parse_mode'=>'html',
-        'reply_markup'=> $this->kaygnt(),
+       
         ]);
     $send();
-  //  $this->meet["placename"]=2;
+    $this->meet["placename"]=2;
       }
     }
     public function kaygnt(){
@@ -90,7 +87,7 @@ class sabtemakan extends Magazine{
                 ];
                
             } 
-            
+           
         }
        
         return json_encode(["inline_keyboard"=> $keys ]);
