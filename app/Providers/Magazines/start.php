@@ -11,7 +11,7 @@ use XB\telegramObjects\KeyboardButton;
 
 class start extends Magazine {
 	public function showMenu( $u ) {
-		$this->meet["placename"]=0;
+		unset($this->meet["placename"]);
 		if(Member::where('user_id',$u->message->from->id)->count()==0){           
 			Member::create( [
 				'user_id'    => $u->message->from->id,
@@ -43,6 +43,7 @@ class start extends Magazine {
 
 	}
 	public function registerplace( $u ){
+		unset($this->meet["placename"]);
 		$send = new sendMessage( [
 			'chat_id'      => $u->message->chat->id,
 			'text'         => "یکی رو انتخاب کن",
@@ -52,6 +53,7 @@ class start extends Magazine {
 					
 					 [ ' ثبت مکان جدید' ],
 					[ 'ویرایش مکان' ],
+					[ 'بازگشت' ],
 				],
 				'resize_keyboard'   => true,
 				'one_time_keyboard' => true,
@@ -65,6 +67,7 @@ class start extends Magazine {
 	}
 
 	public function aboutUs( $u ) {
+		unset($this->meet["placename"]);
 		$send = new sendMessage( [
 			'chat_id'    => $u->message->chat->id,
 			'text'       => " ربات مکان یاب تو قم " .
