@@ -32,10 +32,17 @@ $this->trigger(function(&$u){
 },'sabtemakan@local');
 
 $this->trigger(function(&$u){
-    // if ($u->message->text=='بازگشت'){
-    // unset($this->meet["placename"]);}
     return !empty($u->message->text) && $u->message->text=='بازگشت';
 },'start@showMenu');
+
+$this->trigger(function(&$u){
+    return !empty($u->message->text) && $u->message->text=='ندارد';
+},'sabtemakan@webpagereg');
+
+$this->trigger(function(&$u){
+    return !empty($u->message->text) && $u->message->text==' برگشت به مرحله اول ';
+},'start@showMenu');
+
 
 $this->trigger(function(&$u){
     return !empty($u->message->text) && !empty($this->meet["placename"]) && $this->meet["placename"]==1;
@@ -52,6 +59,10 @@ $this->trigger(function(&$u){
    $this->trigger(function(&$u){
     return !empty($u->message->text) && !empty($this->meet["placename"]) && $this->meet["placename"]==4;
    },'sabtemakan@webpagereg');
+
+   $this->trigger(function(&$u){
+    return !empty($u->message->text) && !empty($this->meet["placename"]) && $this->meet["placename"]==5;
+   },'sabtemakan@Confirmation');
 
 if (!empty($this->detect->data->path)){
     $this->trigger(function($u){ return true ;},$this->detect->data->path);}

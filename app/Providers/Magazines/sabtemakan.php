@@ -95,39 +95,68 @@ class sabtemakan extends Magazine
             $this->meet["recorde[3]"]=$u->message->text;
                 $send=new sendMessage([
                 'chat_id'=>$this->update->message->chat->id,
-                'text'=> "درصورتی  {$this->meet["recorde[1]"]}  آدرس سایت یا کانال تگرام دارد وارد کنید و در غیر این صورت تایپ کنید ندارد ",
+                'text'=> "درصورتی  {$this->meet["recorde[1]"]}  آدرس سایت یا کانال تلگرام دارد. وارد کنید  ",
                 'parse_mode'=>'html',
-                
-                ]);
+                'reply_markup' => json_encode( [
+                    'keyboard'  => [
+                         [ ' ندارد' ],
+                    
+                    ],
+                    'resize_keyboard'   => true,
+                    'one_time_keyboard' => true,
+                ] ),
+            ] );
             $send();
             $this->meet["placename"]=4;
         }
     }
     public function webpagereg($u)
     {
-       
-        if ($this->meet["placename"]==4) {
-            $this->meet["recorde[4]"]=$u->message->text;
-                $send=new sendMessage([
+            $this->meet["recorde[4]"]=$u->message->text;     
+            $text="اطلاعات وارد شده شما به شرح زیر است :"."\n".
+            "place:".$this->meet["recorde[1]"]."\n".
+            "phone:".$this->meet["recorde[2]"]."\n".
+            "adress:".$this->meet["recorde[3]"]."\n".
+            "webpage:".$this->meet["recorde[4]"];
+            $send=new sendMessage([
                 'chat_id'=>$this->update->message->chat->id,
-                'text'=> "مکان شما با موفقیت ثبت شد .با تشکر از همکاری شما عزییییییزم",
+                'text'=> $text,
                 'parse_mode'=>'html',
                 'reply_markup' => json_encode( [
-                    'keyboard'          => [
-                         [ 'بازگشت' ]
+                    'keyboard'  => [
+                         [ ' تایید اطلاعات' ],
+                         [ ' برگشت به مرحله اول ' ],
                     ],
                     'resize_keyboard'   => true,
                     'one_time_keyboard' => true,
                 ] ),
             ] );
-               
-                $send();
-        }
-        \App\places::insert(
-            ['locations_id'=> $this->meet["recorde[6]"],'parentID'=>$this->meet["recorde[5]"],'place' =>$this->meet["recorde[1]"] , 'phone' =>$this->meet["recorde[2]"],'adress'=>$this->meet["recorde[3]"] ,'webpage'=>$this->meet["recorde[4]"] ,'pic'=>'hugu','tag'=>'jhg','sign'=>'gygy']
-        );
-       unset($this->meet["placename"]);
-    }
+            $send();
+            $this->meet["placename"]=5; }  
+                
+    public function Confirmation($u)
+            {
+                $send=new sendMessage([
+                    'chat_id'=>$this->update->message->chat->id,
+                    'text'=> "مکان شما با موفقیت ثبت شد .با تشکر از همکاری شما عزییییییزم",
+                    'parse_mode'=>'html',
+                    'reply_markup' =>  json_encode( [
+                        'keyboard'          => [
+                             [ 'جستجو مکان' ],
+                             [ 'ثبت مکان' ],
+                            [ 'درباره ربات' ],
+                        ],
+                        'resize_keyboard'   => true,
+                        'one_time_keyboard' => true,
+                    ] ),
+                ] );
+                    $send();
+                
+                \App\places::insert(
+                ['locations_id'=> $this->meet["recorde[6]"],'parentID'=>$this->meet["recorde[5]"],'place' =>$this->meet["recorde[1]"] , 'phone' =>$this->meet["recorde[2]"],'adress'=>$this->meet["recorde[3]"] ,'webpage'=>$this->meet["recorde[4]"] ,'pic'=>'hugu','tag'=>'jhg','sign'=>'gygy']
+                );
+                unset($this->meet["placename"]);
+            }
 
     public function kaygntthree()
     {
@@ -221,5 +250,20 @@ class sabtemakan extends Magazine
        
         return json_encode(["inline_keyboard"=> $keys ]);
     }
-   
+    public function noweb()
+    {
+        $keys=[];
+                $keys[]=[
+                    [
+                        "text"=>"ندارد ",
+                        "callback_data"=>interlink([
+                            "path"=>"sabtemakan@webpagereg",
+                        ])
+                    ]
+                ];
+           
+       
+        return json_encode(["inline_keyboard"=> $keys ]);
+    }
 }
+
