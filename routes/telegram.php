@@ -19,15 +19,23 @@ $this->trigger(function(&$u){
 
 $this->trigger(function(&$u){
 return !empty($u->message->text) && $u->message->text=='ثبت مکان جدید';
-},'sabtemakan@regplace');
+},'sabtemakan@local');
 
 $this->trigger(function(&$u){//dd($this->meet["placename"]);
     return !empty($u->message->text) && !empty($this->meet["placename"]) && $this->meet["placename"]==1;
    },'sabtemakan@namereg');
 
-   $this->trigger(function(&$u){//dd($this->meet["placename"]);
+   $this->trigger(function(&$u){
     return !empty($u->message->text) && !empty($this->meet["placename"]) && $this->meet["placename"]==2;
    },'sabtemakan@phonereg');
+
+   $this->trigger(function(&$u){
+    return !empty($u->message->text) && !empty($this->meet["placename"]) && $this->meet["placename"]==3;
+   },'sabtemakan@adressreg');
+
+   $this->trigger(function(&$u){
+    return !empty($u->message->text) && !empty($this->meet["placename"]) && $this->meet["placename"]==4;
+   },'sabtemakan@webpagereg');
 
 if (!empty($this->detect->data->path)){
     $this->trigger(function($u){ return true ;},$this->detect->data->path);
