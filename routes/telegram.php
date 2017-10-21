@@ -2,16 +2,11 @@
 use XB\theory\Shoot;
 use XB\telegramMethods\sendMessage;
 
-//echo($this->meet["placename"]);
 $this->trigger(function(&$u){
-    // if ($u->message->text=='/start'){
-    // unset($this->meet["placename"]);}
     return !empty($u->message->text) && $u->message->text=='/start';
 },'start@showMenu');
 
 $this->trigger(function(&$u){	
-    // if ($u->message->text=='درباره ربات'){
-    // unset($this->meet["placename"]);}
     return !empty($u->message->text) && $u->message->text=='درباره ربات';
 },'start@aboutUs');
 
@@ -20,14 +15,10 @@ $this->trigger(function(&$u){
 },'makanyab@makanemoredenazar');
 
 $this->trigger(function(&$u){	
-    // if ($u->message->text=='ثبت مکان'){
-    // unset($this->meet["placename"]);}
     return !empty($u->message->text) && $u->message->text=='ثبت مکان';
 },'start@registerplace');
 
 $this->trigger(function(&$u){	
-    // if ($u->message->text=='ثبت مکان جدید'){
-    // unset($this->meet["placename"]);}
     return !empty($u->message->text) && $u->message->text=='ثبت مکان جدید';
 },'sabtemakan@local');
 

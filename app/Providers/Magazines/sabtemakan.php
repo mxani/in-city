@@ -99,7 +99,7 @@ class sabtemakan extends Magazine
                 'parse_mode'=>'html',
                 'reply_markup' => json_encode( [
                     'keyboard'  => [
-                         [ ' ندارد' ],
+                         [ 'ندارد' ],
                     
                     ],
                     'resize_keyboard'   => true,
@@ -107,7 +107,8 @@ class sabtemakan extends Magazine
                 ] ),
             ] );
             $send();
-            $this->meet["placename"]=4;
+            if (!$u->message->text=="ندارد"){
+            $this->meet["placename"]=4;}
         }
     }
     public function webpagereg($u)
@@ -250,20 +251,6 @@ class sabtemakan extends Magazine
        
         return json_encode(["inline_keyboard"=> $keys ]);
     }
-    public function noweb()
-    {
-        $keys=[];
-                $keys[]=[
-                    [
-                        "text"=>"ندارد ",
-                        "callback_data"=>interlink([
-                            "path"=>"sabtemakan@webpagereg",
-                        ])
-                    ]
-                ];
-           
-       
-        return json_encode(["inline_keyboard"=> $keys ]);
-    }
+    
 }
 

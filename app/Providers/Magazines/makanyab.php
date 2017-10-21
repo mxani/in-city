@@ -85,10 +85,8 @@ class makanyab extends Magazine{
        $id=$this->detect->data->id;
        $data=\App\places::where("id", $id=$this->detect->data->id)->get()->first();
        $text="<a href=\"$data->pic\">&#8205;</a>\n ".
-            "place:". $data->place."\n".
-            "phone:".$data->phone."\n".
-            "adress:".$data->adress."\n".
-            "webpage:".$data->webpage;
+             "place:". $data->place."\n";
+          
        $send=new editMessageText([
         'chat_id'=>$this->update->callback_query->message->chat->id,
         'message_id'=>$u->callback_query->message->message_id,
@@ -100,6 +98,57 @@ class makanyab extends Magazine{
     $send();
 
     }
+    public function contactinfo ($u){
+        $this->meet["correction"]="yes";
+        $this->timesUse(); //return ;
+        $data=\App\places::where("id", $id=$this->detect->data->id)->get()->first();
+        $text= "place:". $data->place."\n".
+               "تلفن تماس:".$data->phone."\n".
+               "ادرس:".$data->adress."\n".
+               "صفحه وب".$data->webpage."\n";    
+        $send=new editMessageText([
+         'chat_id'=>$this->update->callback_query->message->chat->id,
+         'message_id'=>$u->callback_query->message->message_id,
+         'text'=>$text ,
+         'parse_mode'=>'html',
+         'reply_markup'=> $this->kaygntfive(),
+         
+         ]);
+         $send();
+         
+     }
+
+     public function timesUse (){
+
+         $user_id=$this->update->callback_query->message->chat->id;
+         $data=\App\timesUse::where("user_id", $user_id)->first()->id;
+         if (empty($data)){
+            \App\timesUse::insert(
+                ['user_id'=>$user_id,'times_use'=>"1"]
+                );  
+         }
+         else{
+          $times_use=\App\timesUse::find($data)->times_use; 
+          if($times_use<3){
+          $update=$times_use+1;
+          \App\timesUse::
+           where('user_id',$user_id)
+           ->update(['times_use' =>$update]);
+          } 
+        else{
+            $send=new editMessageText([
+                'chat_id'=>$this->update->callback_query->message->chat->id,
+                'message_id'=>$this->update->callback_query->message->message_id,
+                'text'=>"شما بیش از 20 بار از این قابلیت استفاده کرده اید " ,
+                'parse_mode'=>'html',
+                
+                
+                ]);
+                $send();
+             
+        }
+        }
+     }
     public function kaygnt(){
         $keys=[];
         $data=\App\categories::get();
@@ -324,15 +373,15 @@ class makanyab extends Magazine{
                 
             }
     public function kaygntfour(){   
-    $data=\App\places::get();        
-    $parentID=\App\places::pluck('parentID')->toArray();
-    $idplace=$this->meet["lastid"];
-    $dataplc=\App\places::find($idplace);
-   if (empty($this->detect->data->loc)){
-    $idlocation=$this->detect->data->id;}
-    else{$idlocation=$this->detect->data->loc;}
-    $y=0;$maxzan=[];$a=0;$finalplace=[];$keys=[];
-    for($i=0;$i<count($data);$i++){
+        $data=\App\places::get();        
+        $parentID=\App\places::pluck('parentID')->toArray();
+        $idplace=$this->meet["lastid"];
+        $dataplc=\App\places::find($idplace);
+        if (empty($this->detect->data->loc)){
+        $idlocation=$this->detect->data->id;}
+        else{$idlocation=$this->detect->data->loc;}
+        $y=0;$maxzan=[];$a=0;$finalplace=[];$keys=[];
+        for($i=0;$i<count($data);$i++){
         if ($parentID[$i]==$idplace)
         { 
             $maxzan[$y]=$data[$i]->id;
@@ -347,7 +396,7 @@ class makanyab extends Magazine{
         }
             
         }
-    if(count($finalplace)%2==1){   
+     if(count($finalplace)%2==1){   
         for($r=0;$r<count($finalplace)-2;$r+=2){
             
                     $keys[]=[
@@ -399,7 +448,7 @@ class makanyab extends Magazine{
                     ],   
                 ];
             }
-    if(count($finalplace)%2==0){
+     if(count($finalplace)%2==0){
         for($r=0;$r<count($finalplace)-1;$r+=2){
             
                   $keys[]=[
@@ -442,14 +491,12 @@ class makanyab extends Magazine{
 
            }
 return json_encode(["inline_keyboard"=> $keys ]);}
-                          
-  
-
 
 public function kaygntfive(){
     $id=$this->detect->data->id;
     $locationID=\App\places::where("id", $id=$this->detect->data->id)->get()->first()->locations_id;
     $keys[]=[
+     
         [
       
       "text"=>"back to first menue",
@@ -458,6 +505,7 @@ public function kaygntfive(){
           "path"=>"makanyab@makanemoredenazar", 
       ])
       ],
+    
       [
           
           "text"=>"back one step",
@@ -468,6 +516,19 @@ public function kaygntfive(){
           ])
           ],   
     ];
+    if(empty($this->meet["correction"])){ 
+        $keys[]=[
+            [
+                "text"=>"contact info",
+                "callback_data"=>interlink([
+                    "id"=>$id,
+                    "path"=>"makanyab@contactinfo", 
+            
+            ])
+            ]
+        ];
+       
+    } unset($this->meet["correction"]);
     return json_encode(["inline_keyboard"=> $keys ]);
 }
 
