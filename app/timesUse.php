@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class timesUse extends Model
 {
-    protected $table = 'timesUse';
+    protected $table = 'times_uses';
 }

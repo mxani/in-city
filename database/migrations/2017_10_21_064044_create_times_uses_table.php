@@ -16,8 +16,7 @@ class CreateTimesUsesTable extends Migration
         Schema::create('times_uses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('user_id');
-            $table->integer('times_use');
-            $table->rememberToken();
+            $table->integer('placeID');
             $table->timestamps();
         });
     }

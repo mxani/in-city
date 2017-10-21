@@ -100,8 +100,13 @@ class makanyab extends Magazine{
     }
     public function contactinfo ($u){
         $this->meet["correction"]="yes";
-        $this->timesUse(); //return ;
-        $data=\App\places::where("id", $id=$this->detect->data->id)->get()->first();
+        $id=$this->detect->data->id;
+        $this->timesUse($id); 
+        if ($this->meet["limite"]=="yes"){
+            
+        }
+        else{
+        $data=\App\places::where("id", $id)->get()->first();
         $text= "place:". $data->place."\n".
                "تلفن تماس:".$data->phone."\n".
                "ادرس:".$data->adress."\n".
@@ -117,37 +122,37 @@ class makanyab extends Magazine{
          $send();
          
      }
-
-     public function timesUse (){
+     unset($this->meet["limite"]);
+    }
+     public function timesUse ($id){
 
          $user_id=$this->update->callback_query->message->chat->id;
-         $data=\App\timesUse::where("user_id", $user_id)->first()->id;
-         if (empty($data)){
-            \App\timesUse::insert(
-                ['user_id'=>$user_id,'times_use'=>"1"]
-                );  
-         }
-         else{
-          $times_use=\App\timesUse::find($data)->times_use; 
-          if($times_use<3){
-          $update=$times_use+1;
-          \App\timesUse::
-           where('user_id',$user_id)
-           ->update(['times_use' =>$update]);
-          } 
-        else{
+         $time =date('Y-m-d H:i:s');$y=0;
+         $dbuser=\App\timesUse::pluck('user_id')->toArray();
+         \App\timesUse::insert(
+            ['user_id'=>$user_id,'placeID'=>$id,"created_at"=>$time]
+            );  
+            for($i=0;$i<count($dbuser);$i++)
+            {
+                if( $dbuser[$i]==$user_id){
+                    $y+=1;
+                }
+               
+            }
+          if ($y>18){
+        
             $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,
                 'message_id'=>$this->update->callback_query->message->message_id,
                 'text'=>"شما بیش از 20 بار از این قابلیت استفاده کرده اید " ,
                 'parse_mode'=>'html',
-                
-                
-                ]);
+                'reply_markup'=> $this->kaygntfive(),
+                ] );
                 $send();
-             
-        }
-        }
+                $this->meet["limite"]="yes";
+            }
+        // }
+      //  }
      }
     public function kaygnt(){
         $keys=[];
