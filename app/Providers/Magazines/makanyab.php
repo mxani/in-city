@@ -102,7 +102,7 @@ class makanyab extends Magazine{
         $this->meet["correction"]="yes";
         $id=$this->detect->data->id;
         $this->timesUse($id); 
-        if ($this->meet["limite"]=="yes"){
+        if (!empty($this->meet["limite"])&&$this->meet["limite"]=="yes"){
             
         }
         else{
@@ -122,24 +122,35 @@ class makanyab extends Magazine{
          $send();
          
      }
-     unset($this->meet["limite"]);
+      unset($this->meet["limite"]);
     }
      public function timesUse ($id){
 
          $user_id=$this->update->callback_query->message->chat->id;
-         $time =date('Y-m-d H:i:s');$y=0;
+         $data=\App\timesUse::get();
+         $time=date('Y-m-d H:i:s');$y=0;$x=0;$maxzan=[];
          $dbuser=\App\timesUse::pluck('user_id')->toArray();
          \App\timesUse::insert(
             ['user_id'=>$user_id,'placeID'=>$id,"created_at"=>$time]
             );  
-            for($i=0;$i<count($dbuser);$i++)
+            for($i=0;$i<count($data);$i++)
             {
                 if( $dbuser[$i]==$user_id){
-                    $y+=1;
+                    $maxzan[$y]=$i;
+                    $timestamp[$y]=$data[$maxzan[$y]]->created_at->timestamp;
+                    $y+=1; 
                 }
-               
+            } 
+            $lastid=count($maxzan)-1;
+            $today=$data[$lastid]->created_at->timestamp;
+            $yeste=$data[$lastid]->created_at->subDay()->timestamp;
+            for($j=0;$j<count($maxzan);$j++){
+            if($timestamp[$j]>$yeste&&$timestamp[$j]<$today){
+                $timeuse[$x]=$timestamp[$j];
+                $x+=1;
             }
-          if ($y>18){
+        }
+          if ($x>5){
         
             $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,

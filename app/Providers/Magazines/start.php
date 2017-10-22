@@ -29,7 +29,7 @@ class start extends Magazine {
 			'reply_markup' => json_encode( [
 				'keyboard'          => [
 					 [ 'جستجو مکان' ],
-					 [ 'ثبت مکان' ],
+					 [ 'مکان من'],
 					[ 'درباره ربات' ],
 				],
 				'resize_keyboard'   => true,
@@ -43,7 +43,21 @@ class start extends Magazine {
 
 	}
 	public function registerplace( $u ){
+
 		unset($this->meet["placename"]);
+		$user_id=$this->update->message->chat->id;
+		$dbuser=\App\regplaceUser::pluck('user_id')->toArray();
+		$serch=array_search($user_id,$dbuser);
+		
+		\App\regplaceUser::insert(
+            ['user_id'=>$user_id]
+			); 
+		if ($serch=null){
+		$data=\App\regplaceUser::get();
+		$dbuser=\App\regplaceUser::pluck('user_id')->toArray();
+		
+		
+
 		$send = new sendMessage( [
 			'chat_id'      => $u->message->chat->id,
 			'text'         => "یکی رو انتخاب کن",
@@ -63,7 +77,7 @@ class start extends Magazine {
 		if ( ! $send() ) {
 			\Storage::append( 'updates/last.json', "error: " . $send->getError() );
 		}
-
+	}
 	}
 
 	public function aboutUs( $u ) {

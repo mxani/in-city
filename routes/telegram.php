@@ -15,7 +15,7 @@ $this->trigger(function(&$u){
 },'makanyab@makanemoredenazar');
 
 $this->trigger(function(&$u){	
-    return !empty($u->message->text) && $u->message->text=='ثبت مکان';
+    return !empty($u->message->text) && $u->message->text=='مکان من';
 },'start@registerplace');
 
 $this->trigger(function(&$u){	
