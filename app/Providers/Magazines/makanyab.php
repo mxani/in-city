@@ -107,7 +107,7 @@ class makanyab extends Magazine{
         }
         else{
         $data=\App\places::where("id", $id)->get()->first();
-        $text= "place:". $data->place."\n".
+        $text= "مکان:". $data->place."\n".
                "تلفن تماس:".$data->phone."\n".
                "ادرس:".$data->adress."\n".
                "صفحه وب".$data->webpage."\n";    
@@ -116,7 +116,7 @@ class makanyab extends Magazine{
          'message_id'=>$u->callback_query->message->message_id,
          'text'=>$text ,
          'parse_mode'=>'html',
-         'reply_markup'=> $this->kaygntfive(),
+         'reply_markup'=> $this->kaygnsix(),
          
          ]);
          $send();
@@ -141,15 +141,16 @@ class makanyab extends Magazine{
                     $y+=1; 
                 }
             } 
-            $lastid=count($maxzan)-1;
-            $today=$data[$lastid]->created_at->timestamp;
-            $yeste=$data[$lastid]->created_at->subDay()->timestamp;
+           if(count($maxzan)!==0){
+            $lastid=count($maxzan);
+            $today=$data[$lastid-1]->created_at->timestamp;
+            $yeste=$data[$lastid-1]->created_at->subDay()->timestamp;
             for($j=0;$j<count($maxzan);$j++){
             if($timestamp[$j]>$yeste&&$timestamp[$j]<$today){
                 $timeuse[$x]=$timestamp[$j];
                 $x+=1;
             }
-        }
+        }}
           if ($x>5){
         
             $send=new editMessageText([
@@ -157,13 +158,12 @@ class makanyab extends Magazine{
                 'message_id'=>$this->update->callback_query->message->message_id,
                 'text'=>"شما بیش از 20 بار از این قابلیت استفاده کرده اید " ,
                 'parse_mode'=>'html',
-                'reply_markup'=> $this->kaygntfive(),
+                'reply_markup'=> $this->kaygnsix(),
                 ] );
                 $send();
-                $this->meet["limite"]="yes";
+               $this->meet["limite"]="yes";
             }
-        // }
-      //  }
+        
      }
     public function kaygnt(){
         $keys=[];
@@ -532,7 +532,7 @@ public function kaygntfive(){
           ])
           ],   
     ];
-    if(empty($this->meet["correction"])){ 
+ 
         $keys[]=[
             [
                 "text"=>"contact info",
@@ -544,9 +544,38 @@ public function kaygntfive(){
             ]
         ];
        
-    } unset($this->meet["correction"]);
+  
     return json_encode(["inline_keyboard"=> $keys ]);
 }
 
-                      
+public function kaygnsix(){
+    $id=$this->detect->data->id;
+    $locationID=\App\places::where("id", $id=$this->detect->data->id)->get()->first()->locations_id;
+    $keys[]=[
+     
+        [
+      
+      "text"=>"back to first menue",
+      "callback_data"=>interlink([
+          "text"=>"back",
+          "path"=>"makanyab@makanemoredenazar", 
+      ])
+      ],
+    
+      [
+          
+          "text"=>"back one step",
+          "callback_data"=>interlink([
+              "path"=>"makanyab@lastplace",
+              "loc"=>$locationID,
+              "cor"=>"1",
+          ])
+          ],   
+    ];
+  
+       
+    
+    return json_encode(["inline_keyboard"=> $keys ]);
+}
+                    
 } 
