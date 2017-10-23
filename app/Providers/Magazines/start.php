@@ -48,16 +48,12 @@ class start extends Magazine {
 		$user_id=$this->update->message->chat->id;
 		$dbuser=\App\regplaceUser::pluck('user_id')->toArray();
 		$serch=array_search($user_id,$dbuser);
-		
 		\App\regplaceUser::insert(
             ['user_id'=>$user_id]
 			); 
-		if ($serch=null){
+		if ($serch===false){
 		$data=\App\regplaceUser::get();
 		$dbuser=\App\regplaceUser::pluck('user_id')->toArray();
-		
-		
-
 		$send = new sendMessage( [
 			'chat_id'      => $u->message->chat->id,
 			'text'         => "یکی رو انتخاب کن",
@@ -65,8 +61,27 @@ class start extends Magazine {
 			'reply_markup' => json_encode( [
 				'keyboard'          => [
 					
-					 [ ' ثبت مکان جدید' ],
-					[ 'ویرایش مکان' ],
+					 [ 'ثبت مکان من' ],
+					[ 'بازگشت' ],
+				],
+				'resize_keyboard'   => true,
+				'one_time_keyboard' => true,
+			] ),
+		] );
+	
+		if ( ! $send() ) {
+			\Storage::append( 'updates/last.json', "error: " . $send->getError() );
+		}
+	}
+	else{
+		$send = new sendMessage( [
+			'chat_id'      => $u->message->chat->id,
+			'text'         => "یکی رو انتخاب کن",
+			'parse_mode'   => 'html',
+			'reply_markup' => json_encode( [
+				'keyboard'          => [
+					
+					 [ 'ویرایش مکان من' ],
 					[ 'بازگشت' ],
 				],
 				'resize_keyboard'   => true,

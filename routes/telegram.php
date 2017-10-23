@@ -19,7 +19,7 @@ $this->trigger(function(&$u){
 },'start@registerplace');
 
 $this->trigger(function(&$u){	
-    return !empty($u->message->text) && $u->message->text=='ثبت مکان جدید';
+    return !empty($u->message->text) && $u->message->text=='ثبت مکان من' ;
 },'sabtemakan@local');
 
 $this->trigger(function(&$u){
