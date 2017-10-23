@@ -31,7 +31,7 @@ $this->trigger(function(&$u){
 },'sabtemakan@webpagereg');
 
 $this->trigger(function(&$u){
-    return !empty($u->message->text) && $u->message->text==' برگشت به مرحله اول ';
+    return !empty($u->message->text) && $u->message->text=='برگشت به مرحله اول ';
 },'start@showMenu');
 
 $this->trigger(function(&$u){

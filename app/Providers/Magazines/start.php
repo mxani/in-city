@@ -10,7 +10,7 @@ use XB\telegramObjects\KeyboardButton;
 
 
 class start extends Magazine {
-	public function showMenu( $u ) {
+	public function showMenu( $u ) {//dd("injs");
 		unset($this->meet["placename"]);
 		if(Member::where('user_id',$u->message->from->id)->count()==0){           
 			Member::create( [
@@ -51,7 +51,7 @@ class start extends Magazine {
 		\App\regplaceUser::insert(
             ['user_id'=>$user_id]
 			); 
-		if ($serch===false){
+		if ($serch===false||$serch!==0){
 		$data=\App\regplaceUser::get();
 		$dbuser=\App\regplaceUser::pluck('user_id')->toArray();
 		$send = new sendMessage( [

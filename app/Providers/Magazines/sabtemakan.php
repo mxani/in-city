@@ -125,8 +125,8 @@ class sabtemakan extends Magazine
                 'parse_mode'=>'html',
                 'reply_markup' => json_encode( [
                     'keyboard'  => [
-                         [ ' تایید اطلاعات' ],
-                         [ ' برگشت به مرحله اول ' ],
+                         [ 'تایید اطلاعات' ],
+                         [ 'برگشت به مرحله اول ' ],
                     ],
                     'resize_keyboard'   => true,
                     'one_time_keyboard' => true,
@@ -137,6 +137,7 @@ class sabtemakan extends Magazine
                 
     public function Confirmation($u)
             {
+                if ($u->message->text=='تایید اطلاعات'){
                 $send=new sendMessage([
                     'chat_id'=>$this->update->message->chat->id,
                     'text'=> "مکان شما با موفقیت ثبت شد .با تشکر از همکاری شما عزییییییزم",
@@ -157,6 +158,7 @@ class sabtemakan extends Magazine
                 ['user_id'=>$this->update->message->chat->id,'locations_id'=> $this->meet["recorde[6]"],'parentID'=>$this->meet["recorde[5]"],'place' =>$this->meet["recorde[1]"] , 'phone' =>$this->meet["recorde[2]"],'adress'=>$this->meet["recorde[3]"] ,'webpage'=>$this->meet["recorde[4]"] ,'pic'=>'hugu','tag'=>'jhg','sign'=>'gygy']
                 );
                 unset($this->meet["placename"]);
+            }
             }
 
     
