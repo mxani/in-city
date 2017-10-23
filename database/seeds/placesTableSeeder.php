@@ -17,6 +17,7 @@ class placesTableSeeder extends Seeder
         for ($i=14; $i < 27; $i++) { 
             $place=$makan[$i-14];
             DB::table('places')->insert([
+                'user_id'=>"",
                 'parentID'=>rand(5,12),
                 'locations_id'=>rand(1,10), 
                 'place'=>$place,

@@ -107,8 +107,8 @@ class sabtemakan extends Magazine
                 ] ),
             ] );
             $send();
-            if (!$u->message->text=="ندارد"){
-            $this->meet["placename"]=4;}
+           // if (!$u->message->text=="ندارد"){
+            $this->meet["placename"]=4;//}
         }
     }
     public function webpagereg($u)
@@ -144,7 +144,7 @@ class sabtemakan extends Magazine
                     'reply_markup' =>  json_encode( [
                         'keyboard'          => [
                              [ 'جستجو مکان' ],
-                             [ 'ثبت مکان' ],
+                             [ 'مکان من'],
                             [ 'درباره ربات' ],
                         ],
                         'resize_keyboard'   => true,
@@ -154,11 +154,12 @@ class sabtemakan extends Magazine
                     $send();
                 
                 \App\places::insert(
-                ['locations_id'=> $this->meet["recorde[6]"],'parentID'=>$this->meet["recorde[5]"],'place' =>$this->meet["recorde[1]"] , 'phone' =>$this->meet["recorde[2]"],'adress'=>$this->meet["recorde[3]"] ,'webpage'=>$this->meet["recorde[4]"] ,'pic'=>'hugu','tag'=>'jhg','sign'=>'gygy']
+                ['user_id'=>$this->update->message->chat->id,'locations_id'=> $this->meet["recorde[6]"],'parentID'=>$this->meet["recorde[5]"],'place' =>$this->meet["recorde[1]"] , 'phone' =>$this->meet["recorde[2]"],'adress'=>$this->meet["recorde[3]"] ,'webpage'=>$this->meet["recorde[4]"] ,'pic'=>'hugu','tag'=>'jhg','sign'=>'gygy']
                 );
                 unset($this->meet["placename"]);
             }
 
+    
     public function kaygntthree()
     {
         
@@ -251,6 +252,7 @@ class sabtemakan extends Magazine
        
         return json_encode(["inline_keyboard"=> $keys ]);
     }
-    
+
+
 }
 
