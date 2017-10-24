@@ -10,8 +10,35 @@ use XB\telegramObjects\KeyboardButton;
 
 
 class start extends Magazine {
-	public function showMenu( $u ) {//dd("injs");
+
+	public function showMenu( $u ) {
+
 		unset($this->meet["placename"]);
+		if (empty($this->update->message->chat->id))
+        { 
+	        $send = new sendMessage( [
+			'chat_id'=>$this->update->callback_query->message->chat->id,
+            'message_id'=>$this->update->callback_query->message->message_id,
+			'text'         => "کاربر گرامی خوش آمدید",
+			'parse_mode'   => 'html',
+			'reply_markup' => json_encode( [
+				'keyboard'          => [
+					 [ 'جستجو مکان' ],
+					 [ 'مکان من'],
+					[ 'درباره ربات' ],
+				],
+				'resize_keyboard'   => true,
+				'one_time_keyboard' => true,
+			] ),
+		] );
+	
+			if ( ! $send() ) {
+			\Storage::append( 'updates/last.json', "error: " . $send->getError() );
+			}
+	   }
+
+	   else{ 
+
 		if(Member::where('user_id',$u->message->from->id)->count()==0){           
 			Member::create( [
 				'user_id'    => $u->message->from->id,
@@ -21,8 +48,7 @@ class start extends Magazine {
 			] );
 		}
 
-        
-	        $send = new sendMessage( [
+		$send = new sendMessage( [
 			'chat_id'      => $u->message->chat->id,
 			'text'         => "کاربر گرامی " . $u->message->from->first_name . " عزیز خوش آمدید.",
 			'parse_mode'   => 'html',
@@ -37,10 +63,10 @@ class start extends Magazine {
 			] ),
 		] );
 	
-		if ( ! $send() ) {
-			\Storage::append( 'updates/last.json', "error: " . $send->getError() );
-		}
-
+			if ( ! $send() ) {
+				\Storage::append( 'updates/last.json', "error: " . $send->getError() );
+			}
+	   }
 	}
 	public function registerplace( $u ){
 
@@ -48,10 +74,10 @@ class start extends Magazine {
 		$user_id=$this->update->message->chat->id;
 		$dbuser=\App\regplaceUser::pluck('user_id')->toArray();
 		$serch=array_search($user_id,$dbuser);
-		\App\regplaceUser::insert(
-            ['user_id'=>$user_id]
-			); 
-		if ($serch===false||$serch!==0){
+		// \App\regplaceUser::insert(
+        //     ['user_id'=>$user_id]
+		// 	); 
+		if ($serch===false&&$serch!==0){
 		$data=\App\regplaceUser::get();
 		$dbuser=\App\regplaceUser::pluck('user_id')->toArray();
 		$send = new sendMessage( [

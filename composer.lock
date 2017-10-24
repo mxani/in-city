@@ -2390,7 +2390,7 @@
             "source": {
                 "type": "git",
                 "url": "xani@192.168.1.101:/home/xani/gitRepo/telegram.git",
-                "reference": "efbfbc6742f37ff0b67adb3bb8f470d77490a89c"
+                "reference": "3926f0daf8ecf08907115598e9b9d5cf1eb4251c"
             },
             "require": {
                 "guzzlehttp/guzzle": "^6.2"
@@ -2411,7 +2411,7 @@
                 }
             ],
             "description": "telegram SDK.",
-            "time": "2017-10-14T11:07:45+00:00"
+            "time": "2017-10-23T07:13:08+00:00"
         }
     ],
     "packages-dev": [

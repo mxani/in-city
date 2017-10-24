@@ -15,13 +15,26 @@ class sabtemakan extends Magazine
     public function local($u)
     {
         unset($this->meet["placename"]);
-        $send=new sendMessage([
-            'chat_id'=>$this->update->message->chat->id,
+        if (empty($this->update->message->chat->id))
+        { 
+        $send=new editMessageText([
+            'chat_id'=>$this->update->callback_query->message->chat->id,
+            'message_id'=>$this->update->callback_query->message->message_id,
                'text'=> "مکانی که می خوای ثبت کنی کجاهاست؟ ",
                'parse_mode'=>'html',
                'reply_markup'=> $this->kaygntthree(),
                ]);
            $send();
+         }
+         else{
+            $send=new sendMessage([
+                'chat_id'=>$this->update->message->chat->id,
+                   'text'=> "مکانی که می خوای ثبت کنی کجاهاست؟ ",
+                   'parse_mode'=>'html',
+                   'reply_markup'=> $this->kaygntthree(),
+                   ]);
+               $send(); 
+         }
     }
 
     public function regplace($u)
@@ -43,6 +56,15 @@ class sabtemakan extends Magazine
                 $send();
             }
             else {
+                if (!empty($this->meet["editplc"])&&$this->meet["editplc"]==1){
+                    $this->meet["recorde[5]"]=$this->detect->data->id ;
+                    $user_id=$this->update->callback_query->message->chat->id;
+                    \App\places::
+                    where('user_id',$user_id)
+                    ->update(['locations_id'=> $this->meet["recorde[6]"],'parentID'=>$this->meet["recorde[5]"]]);
+                    $this->caller(editeplc::class)->editeplcinfo();
+                   return; 
+                }
                 $this->meet["recorde[5]"]=$this->detect->data->id ;
                 $send=new editMessageText([
                     'chat_id'=>$this->update->callback_query->message->chat->id,
@@ -113,6 +135,8 @@ class sabtemakan extends Magazine
     }
     public function webpagereg($u)
     {
+
+        if($this->meet["placename"]==4){
             $this->meet["recorde[4]"]=$u->message->text;     
             $text="اطلاعات وارد شده شما به شرح زیر است :"."\n".
             "place:".$this->meet["recorde[1]"]."\n".
@@ -126,17 +150,18 @@ class sabtemakan extends Magazine
                 'reply_markup' => json_encode( [
                     'keyboard'  => [
                          [ 'تایید اطلاعات' ],
-                         [ 'برگشت به مرحله اول ' ],
+                         [ 'برگشت به مرحله اول' ],
                     ],
                     'resize_keyboard'   => true,
                     'one_time_keyboard' => true,
                 ] ),
             ] );
             $send();
-            $this->meet["placename"]=5; }  
+            $this->meet["placename"]=5; }  }
                 
     public function Confirmation($u)
             {
+                $user_id=$this->update->message->chat->id;
                 if ($u->message->text=='تایید اطلاعات'){
                 $send=new sendMessage([
                     'chat_id'=>$this->update->message->chat->id,
@@ -157,6 +182,9 @@ class sabtemakan extends Magazine
                 \App\places::insert(
                 ['user_id'=>$this->update->message->chat->id,'locations_id'=> $this->meet["recorde[6]"],'parentID'=>$this->meet["recorde[5]"],'place' =>$this->meet["recorde[1]"] , 'phone' =>$this->meet["recorde[2]"],'adress'=>$this->meet["recorde[3]"] ,'webpage'=>$this->meet["recorde[4]"] ,'pic'=>'hugu','tag'=>'jhg','sign'=>'gygy']
                 );
+                \App\regplaceUser::insert(
+                    ['user_id'=>$user_id]
+                    ); 
                 unset($this->meet["placename"]);
             }
             }

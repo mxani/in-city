@@ -31,7 +31,7 @@ $this->trigger(function(&$u){
 },'sabtemakan@webpagereg');
 
 $this->trigger(function(&$u){
-    return !empty($u->message->text) && $u->message->text=='برگشت به مرحله اول ';
+    return !empty($u->message->text) && $u->message->text=='برگشت به مرحله اول';
 },'start@showMenu');
 
 $this->trigger(function(&$u){
@@ -75,6 +75,11 @@ $this->trigger(function(&$u){
    $this->trigger(function(&$u){
     return !empty($u->message->text) && !empty($this->meet["fndcart"]) && $this->meet["fndcart"]==4;
    },'editeplc@todbweb');
+
+   $this->trigger(function(&$u){
+    $msg=$this->detect->msgtype??"";
+    return ("photo"==$msg||"document"==$msg) && !empty($this->meet["fndcart"]) && $this->meet["fndcart"]==5;
+   },'editeplc@todbpic');
 
 if (!empty($this->detect->data->path)){
     $this->trigger(function($u){ return true ;},$this->detect->data->path);}
