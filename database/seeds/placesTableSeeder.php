@@ -14,13 +14,13 @@ class placesTableSeeder extends Seeder
     {  
         $makan=["داروخانه شفا","سوپری محمد","مهندسی پزشکی امیر","ایستگاه امام علی","تاکسی تلفنی بانوان","بانک ملی","بانک تجارت","هایپر مارکت همشهری","سینما تربیت","سینما نور","استخر صدف","درمانگاه امام صادق","خونه خودمون"];
         $fake=\Faker\Factory::create('fa_IR');
-        for ($i=14; $i < 27; $i++) { 
-            $place=$makan[$i-14];
+        for ($i=14; $i < 2700; $i++) { 
+         //   $place=$makan[$i-14];
             DB::table('places')->insert([
                 'user_id'=>"",
                 'parentID'=>rand(5,12),
                 'locations_id'=>rand(1,10), 
-                'place'=>$place,
+                'place'=>$fake->name,
                 'phone' => $fake->phonenumber,
                 'adress' =>$fake->address,
                 'webpage' =>$fake->url,

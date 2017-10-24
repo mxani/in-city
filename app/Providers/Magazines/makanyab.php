@@ -10,29 +10,23 @@ use XB\telegramMethods\editMessageReplyMarkup;
 class makanyab extends Magazine{
 
     public function makanemoredenazar(){
-      
-        if (empty($this->update->message->chat->id))
-        { 
-            $send=new editMessageText([
-                'chat_id'=>$this->update->callback_query->message->chat->id,
-                'message_id'=>$this->update->callback_query->message->message_id,
-                'text'=>" دنبال چی  می گردی",
-                'parse_mode'=>'html',
-                'reply_markup'=> $this->kaygnt(),
-                ]);
-            $send();
-        }
-        else{ 
-        $send=new sendMessage([
-            'chat_id'=>$this->update->message->chat->id,
+        $send=sendMessage::class;
+        $message=[
+            'chat_id'=>$this->detect->from->id,
             'text'=>" دنبال چی  می گردی",
             'parse_mode'=>'html',
-            'reply_markup'=> $this->kaygnt(),
-            ]);
-        $send();
+            'reply_markup'=> $this->catkey(), 
+         ];
+
+       if($this->detect->type=='callback_query'){
+            $send=editMessageText::class;
+            $message['message_id']=$this->update->callback_query->message->message_id;
          }
+
+         $send= new $send($message);
+         $send();
+
     }
-    
 
     public function searchplace($u){
     $count=$this->detect->data->count;
@@ -165,7 +159,7 @@ class makanyab extends Magazine{
             }
         
      }
-    public function kaygnt(){
+    public function catkey(){
         $keys=[];
         $data=\App\categories::get();
         $parentID=\App\categories::pluck('parentID')->toArray();
@@ -402,7 +396,7 @@ class makanyab extends Magazine{
         { 
             $maxzan[$y]=$data[$i]->id;
             
-            if($data[$maxzan[$y]-1]->locations_id==$idlocation)
+            if(!empty($data[$maxzan[$y]-1])&&$data[$maxzan[$y]-1]->locations_id==$idlocation)
             {
                 $finalplace[$a]=$data[$maxzan[$y]-1]->place;
                 $finalplaceid[$a]=$data[$maxzan[$y]-1]->id;

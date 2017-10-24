@@ -51,14 +51,15 @@ class sabtemakan extends Magazine
                 'message_id'=>$this->update->callback_query->message->message_id,
                 'text'=>"مکان مورد نظر شما در کدام دسته جای دارد ",
                 'parse_mode'=>'html',
-                'reply_markup'=> $this->kaygnt(),
+                'reply_markup'=> $this->catkey(),
                 ]);
                 $send();
             }
-            else {
+            else { 
                 if (!empty($this->meet["editplc"])&&$this->meet["editplc"]==1){
                     $this->meet["recorde[5]"]=$this->detect->data->id ;
                     $user_id=$this->update->callback_query->message->chat->id;
+                    unset($this->meet["editplc"]);
                     \App\places::
                     where('user_id',$user_id)
                     ->update(['locations_id'=> $this->meet["recorde[6]"],'parentID'=>$this->meet["recorde[5]"]]);
@@ -256,7 +257,7 @@ class sabtemakan extends Magazine
             return json_encode(["inline_keyboard"=> $keys ]);
     }
 
-    public function kaygnt()
+    public function catkey()
     {
         $keys=[];
         $data=\App\categories::get();
