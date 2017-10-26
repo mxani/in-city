@@ -293,8 +293,9 @@ class makanyab extends Magazine{
         return json_encode(["inline_keyboard"=> $keys ]);
         
             }
+
     public function kaygntfour(){   
-        $data=\App\places::get();        
+        $count=\App\places::count();        
         $parentID=\App\places::pluck('parentID')->toArray();
         $idplace=$this->meet["lastid"];
         $dataplc=\App\places::find($idplace);
@@ -302,15 +303,15 @@ class makanyab extends Magazine{
         $idlocation=$this->detect->data->id;}
         else{$idlocation=$this->detect->data->loc;}
         $y=0;$maxzan=[];$a=0;$finalplace=[];$keys=[];
-        for($i=0;$i<count($data);$i++){
+        for($i=1;$i<$count;$i++){
         if ($parentID[$i]==$idplace)
         { 
-            $maxzan[$y]=$data[$i]->id;
-            
-            if(!empty($data[$maxzan[$y]-1])&&$data[$maxzan[$y]-1]->locations_id==$idlocation)
+            $maxzan[$y]=\App\places::find($i)->id;
+            dd($maxzan);
+            if(!empty(\App\places::find($maxzan[$y]-1))&&\App\places::find($maxzan[$y]-1)->locations_id==$idlocation)
             {
-                $finalplace[$a]=$data[$maxzan[$y]-1]->place;
-                $finalplaceid[$a]=$data[$maxzan[$y]-1]->id;
+                $finalplace[$a]=\App\places::find($maxzan[$y]-1)->place;
+                $finalplaceid[$a]=\App\places::find($maxzan[$y]-1)->id;
                 $a+=1;
             }
             $y+=1;
@@ -364,7 +365,7 @@ class makanyab extends Magazine{
                     "text"=>"back one step",
                     "callback_data"=>interlink([
                         "path"=>"makanyab@local",
-                        "id"=>$data->find($maxzan[0])->parentID,
+                        "id"=>\App\places::find($maxzan[0])->parentID,
                     ])
                     ],   
                 ];
@@ -405,7 +406,7 @@ class makanyab extends Magazine{
                       "text"=>"back one step",
                       "callback_data"=>interlink([
                           "path"=>"makanyab@local",
-                          "id"=>$data->find($maxzan[0])->parentID,
+                          "id"=>\App\places::find($maxzan[0])->parentID,
                       ])
                       ],   
                 ];
