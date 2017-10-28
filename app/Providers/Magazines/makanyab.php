@@ -67,7 +67,7 @@ class makanyab extends Magazine{
 
     public function placeinfo($u){
        $id=$this->detect->data->id;
-       $data=\App\places::where("id", $id=$this->detect->data->id)->get()->first();
+       $data=\App\places::where("id", $id)->get()->first();
        $text="<a href=\"$data->pic\">&#8205;</a>\n ".
              "place:". $data->place."\n";
           
@@ -76,7 +76,7 @@ class makanyab extends Magazine{
         'message_id'=>$u->callback_query->message->message_id,
         'text'=>$text ,
         'parse_mode'=>'html',
-        'reply_markup'=> $this->kaygntfive(),
+        'reply_markup'=> $this->plcinfokey(),
         
         ]);
     $send();
@@ -111,30 +111,44 @@ class makanyab extends Magazine{
      public function timesUse ($id){
 
          $user_id=$this->update->callback_query->message->chat->id;
+         $count=\App\timesUse::count();
          $data=\App\timesUse::get();
-         $time=date('Y-m-d H:i:s');$y=0;$x=0;$maxzan=[];
+         $time=date('Y-m-d H:i:s');
+         $y=0;$x=0;$maxzan=[];$i=0;
          $dbuser=\App\timesUse::pluck('user_id')->toArray();
          \App\timesUse::insert(
             ['user_id'=>$user_id,'placeID'=>$id,"created_at"=>$time]
             );  
-            for($i=0;$i<count($data);$i++)
-            {
-                if( $dbuser[$i]==$user_id){
-                    $maxzan[$y]=$i;
-                    $timestamp[$y]=$data[$maxzan[$y]]->created_at->timestamp;
-                    $y+=1; 
-                }
-            } 
-           if(count($maxzan)!==0){
-            $lastid=count($maxzan);
-            $today=$data[$lastid-1]->created_at->timestamp;
-            $yeste=$data[$lastid-1]->created_at->subDay()->timestamp;
-            for($j=0;$j<count($maxzan);$j++){
-            if($timestamp[$j]>$yeste&&$timestamp[$j]<$today){
-                $timeuse[$x]=$timestamp[$j];
+            $maxzan=\App\timesUse::where('user_id', $user_id)->get();
+            $arraymaxzan=$maxzan->pluck('created_at');
+            foreach ($arraymaxzan as $value) {
+                $arraymaxzan[$i]=$value->timestamp;
+                $i+=1;
+            }
+              
+            // for($i=0;$i<count($data);$i++)
+            // {
+               
+            //     if( $dbuser[$i]==$user_id){
+            //          $y+=1; 
+            //          $maxzan[$y]=$i;
+            //          $timestamp[$y]=$data[$maxzan[$y]]->created_at->timestamp;
+                    
+            //     }
+            // } 
+        //    if(count($maxzan)!==0){
+        //     $lastid=count($maxzan);
+            $today=$maxzan->last()->created_at->timestamp;
+           // $today=$data[$lastid-1]->created_at->timestamp;dd($today);
+            $yeste=$maxzan->last()->subDay()->timestamp;
+          //  $yeste=$data[$lastid-1]->created_at->subDay()->timestamp;
+            for($j=0;$j<count($arraymaxzan);$j++){
+            if($arraymaxzan[$j]>$yeste&&$arraymaxzan[$j]<$today){
+                //$timeuse[$x]=$arraymaxzan[$j];
                 $x+=1;
             }
-        }}
+      }dd($x);
+  // }
           if ($x>5){
         
             $send=new editMessageText([
@@ -300,7 +314,6 @@ class makanyab extends Magazine{
     public function lastplckey(){
 
         $count=\App\places::count();        
-       // $parentID=\App\places::pluck('parentID')->toArray();
         $idplace=$this->meet["lastid"]; 
         $dataplc=\App\places::find($idplace);
         if (empty($this->detect->data->loc)){
@@ -310,7 +323,7 @@ class makanyab extends Magazine{
         $maxzan= \App\places::where('parentID',$idplace)->where('locations_id',$idlocation)->get()->toArray();
     
         if(empty($maxzan)){
-      //    dd($this->detect->data);
+
             $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,
                 'message_id'=>$this->update->callback_query->message->message_id,
@@ -420,9 +433,9 @@ class makanyab extends Magazine{
     return json_encode(["inline_keyboard"=> $keys ]);
 }
 
-public function kaygntfive(){
+public function plcinfokey(){
     $id=$this->detect->data->id;
-    $locationID=\App\places::where("id", $id=$this->detect->data->id)->get()->first()->locations_id;
+    $locationID=\App\places::where("id", $id)->get()->first()->locations_id;
     $keys[]=[
      
         [
@@ -494,7 +507,7 @@ public function kaygnsix(){
         $keys[]=[
             [
                 
-                "text"=>"back yuyuone step",
+                "text"=>"back ystep",
                 "callback_data"=>interlink([
                     "path"=>"makanyab@lastplace",
                     "loc"=>$locationID,
