@@ -60,7 +60,7 @@ class makanyab extends Magazine{
             'message_id'=>$u->callback_query->message->message_id,
             'text'=> "مکان های مورد نظر شما",
             'parse_mode'=>'html',
-            'reply_markup'=> $this->kaygntfour(),
+            'reply_markup'=> $this->lastplckey(),
             ]);
         $send();
     }
@@ -155,6 +155,7 @@ class makanyab extends Magazine{
             $j=0;
         }
         else {
+           
             $j=$this->detect->data->id;
            
         }
@@ -225,6 +226,8 @@ class makanyab extends Magazine{
                     "callback_data"=>interlink([
                         "text"=>"back",
                         "path"=>"makanyab@makanemoredenazar", 
+                        "id"=>0,
+
                     ])
                     ],
                     [
@@ -294,125 +297,128 @@ class makanyab extends Magazine{
         
             }
 
-    public function kaygntfour(){   
+    public function lastplckey(){
+
         $count=\App\places::count();        
-        $parentID=\App\places::pluck('parentID')->toArray();
-        $idplace=$this->meet["lastid"];
+       // $parentID=\App\places::pluck('parentID')->toArray();
+        $idplace=$this->meet["lastid"]; 
         $dataplc=\App\places::find($idplace);
         if (empty($this->detect->data->loc)){
         $idlocation=$this->detect->data->id;}
         else{$idlocation=$this->detect->data->loc;}
-        $y=0;$maxzan=[];$a=0;$finalplace=[];$keys=[];
-        for($i=1;$i<$count;$i++){
-        if ($parentID[$i]==$idplace)
-        { 
-            $maxzan[$y]=\App\places::find($i)->id;
-            dd($maxzan);
-            if(!empty(\App\places::find($maxzan[$y]-1))&&\App\places::find($maxzan[$y]-1)->locations_id==$idlocation)
-            {
-                $finalplace[$a]=\App\places::find($maxzan[$y]-1)->place;
-                $finalplaceid[$a]=\App\places::find($maxzan[$y]-1)->id;
-                $a+=1;
-            }
-            $y+=1;
+        $maxzan=[];$finalplace=[];$keys=[];
+        $maxzan= \App\places::where('parentID',$idplace)->where('locations_id',$idlocation)->get()->toArray();
+    
+        if(empty($maxzan)){
+      //    dd($this->detect->data);
+            $send=new editMessageText([
+                'chat_id'=>$this->update->callback_query->message->chat->id,
+                'message_id'=>$this->update->callback_query->message->message_id,
+                'text'=>"چنین موردی وجود ندارد " ,
+                'parse_mode'=>'html',
+                'reply_markup'=>$this->kaygnsix(),
+                ] );
+                $send();
         }
-            
-        }
-     if(count($finalplace)%2==1){   
-        for($r=0;$r<count($finalplace)-2;$r+=2){
-            
-                    $keys[]=[
-                        [
-                "text"=>$finalplace[$r],
-                "callback_data"=>interlink([
-                    "id"=>$finalplaceid[$r],
-                    "path"=>"makanyab@placeinfo",
-                    
-                ])
-                ],
-                [
-                    "text"=>$finalplace[$r+1],
+        
+        if(count($maxzan)%2==1){   
+            for($r=0;$r<count($maxzan)-2;$r+=2){
+                
+                        $keys[]=[
+                            [
+                    "text"=>$maxzan[$r]['place'],
                     "callback_data"=>interlink([
-                        "id"=>$finalplaceid[$r+1],
+                        "id"=>$maxzan[$r]['id'],
                         "path"=>"makanyab@placeinfo",
                         
                     ])
-                    ]
-                        ];  
-                } 
-
-                $keys[]=[
-                [
-                "text"=>$finalplace[count($finalplace)-1],
-                "callback_data"=>interlink([
-                    "id"=>$finalplaceid[count($finalplace)-1],
-                    "path"=>"makanyab@placeinfo",
-                
-                ])
-                ]
-            ]; 
-                $keys[]=[
+                    ],
                     [
-                
-                "text"=>"back to first menue",
-                "callback_data"=>interlink([
-                    "text"=>"back",
-                    "path"=>"makanyab@makanemoredenazar", 
-                ])
-                ],
-                [
-                    
-                    "text"=>"back one step",
+                        "text"=>$maxzan[$r+1]['place'],
+                        "callback_data"=>interlink([
+                            "id"=>$maxzan[$r+1]['id'],
+                            "path"=>"makanyab@placeinfo",
+                            
+                        ])
+                        ]
+                            ];  
+                    } 
+
+                    $keys[]=[
+                    [
+                    "text"=>end($maxzan)['place'],
                     "callback_data"=>interlink([
-                        "path"=>"makanyab@local",
-                        "id"=>\App\places::find($maxzan[0])->parentID,
+                        "id"=>end($maxzan)['id'],
+                        "path"=>"makanyab@placeinfo",
+                    
                     ])
-                    ],   
-                ];
-            }
-     if(count($finalplace)%2==0){
-        for($r=0;$r<count($finalplace)-1;$r+=2){
-            
-                  $keys[]=[
-                      [
-                     "text"=>$finalplace[$r],
-                     "callback_data"=>interlink([
-                         "id"=>$finalplaceid[$r],
-                         "path"=>"makanyab@placeinfo",
-                      
-                     ])
-                     ],
-                     [
-                         "text"=>$finalplace[$r+1],
-                         "callback_data"=>interlink([
-                             "id"=>$finalplaceid[$r+1],
-                             "path"=>"makanyab@placeinfo",
-                          
-                         ])
-                         ]
-                           ];  
-                   } 
-                   $keys[]=[
+                    ]
+                ]; 
+                    $keys[]=[
+                        [
+                    
+                    "text"=>"back to first menue",
+                    "callback_data"=>interlink([
+                        "text"=>"back",
+                        "path"=>"makanyab@makanemoredenazar", 
+                        "id"=>0,
+                    ])
+                    ],
                     [
-                  
-                  "text"=>"back to first menue",
-                  "callback_data"=>interlink([
-                      "text"=>"back",
-                      "path"=>"makanyab@makanemoredenazar", 
-                  ])
-                  ],
-                  [
-                      
-                      "text"=>"back one step",
-                      "callback_data"=>interlink([
-                          "path"=>"makanyab@local",
-                          "id"=>\App\places::find($maxzan[0])->parentID,
-                      ])
-                      ],   
-                ];
+                        
+                        "text"=>"back one step",
+                        "callback_data"=>interlink([
+                            "path"=>"makanyab@local",
+                            "id"=>$maxzan[0]['parentID'],
+                        ])
+                        ],   
+                    ];
+                }
+        if(count($maxzan)%2==0){
+            for($r=0;$r<count($maxzan)-1;$r+=2){
+                
+                    $keys[]=[
+                        [
+                        "text"=>$maxzan[$r]['place'],
+                        "callback_data"=>interlink([
+                            "id"=>$maxzan[$r]['id'],
+                            "path"=>"makanyab@placeinfo",
+                        
+                        ])
+                        ],
+                        [
+                            "text"=>$maxzan[$r+1]['place'],
+                            "callback_data"=>interlink([
+                                "id"=>$maxzan[$r+1]['id'],
+                                "path"=>"makanyab@placeinfo",
+                            
+                            ])
+                            ]
+                            ];  
+                    } 
+                    $keys[]=[
+                        [
+                    
+                    "text"=>"back to first menue",
+                    "callback_data"=>interlink([
+                        "text"=>"back",
+                        "path"=>"makanyab@makanemoredenazar",
+                        "id"=>0, 
+                    ])
+                    ],
+                    [
+                        
+                        "text"=>"back one step",
+                        "callback_data"=>interlink([
+                            "path"=>"makanyab@local",
+                            "id"=>$maxzan[0]['parentID'],
+                        ])
+                        ],   
+                    ];
 
-           }
-return json_encode(["inline_keyboard"=> $keys ]);}
+            }
+    return json_encode(["inline_keyboard"=> $keys ]);
+}
 
 public function kaygntfive(){
     $id=$this->detect->data->id;
@@ -425,6 +431,7 @@ public function kaygntfive(){
       "callback_data"=>interlink([
           "text"=>"back",
           "path"=>"makanyab@makanemoredenazar", 
+          "id"=>0,
       ])
       ],
     
@@ -455,6 +462,7 @@ public function kaygntfive(){
 }
 
 public function kaygnsix(){
+   
     $id=$this->detect->data->id;
     $locationID=\App\places::where("id", $id=$this->detect->data->id)->get()->first()->locations_id;
     $keys[]=[
@@ -465,21 +473,37 @@ public function kaygnsix(){
       "callback_data"=>interlink([
           "text"=>"back",
           "path"=>"makanyab@makanemoredenazar", 
+          "id"=>0,
       ])
       ],
-    
+    ];
+    if (!empty($this->detect->data->lastid)){
+    $keys[]=[
       [
           
           "text"=>"back one step",
           "callback_data"=>interlink([
-              "path"=>"makanyab@lastplace",
-              "loc"=>$locationID,
-              "cor"=>"1",
+            "path"=>"makanyab@local",
+            "id"=>$this->meet["lastid"],
+            
           ])
           ],   
     ];
-  
-       
+}
+    else{
+        $keys[]=[
+            [
+                
+                "text"=>"back yuyuone step",
+                "callback_data"=>interlink([
+                    "path"=>"makanyab@lastplace",
+                    "loc"=>$locationID,
+                    "cor"=>"1",
+                ])
+            ],   
+        ];
+    
+}    
     
     return json_encode(["inline_keyboard"=> $keys ]);
 }
