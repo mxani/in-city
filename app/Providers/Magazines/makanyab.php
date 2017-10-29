@@ -55,14 +55,40 @@ class makanyab extends Magazine{
       
        if (empty($this->detect->data->cor)){
        $this->meet["lastid"]=$this->detect->data->lastid;}
+       $count=\App\places::count();        
+       $idplace=$this->meet["lastid"]; 
+       $dataplc=\App\places::find($idplace);
+       if (empty($this->detect->data->loc)){
+       $idlocation=$this->detect->data->id;}
+       else{$idlocation=$this->detect->data->loc;}
+       $maxzan=[];$finalplace=[];$keys=[];
+       $maxzan= \App\places::where('parentID',$idplace)->where('locations_id',$idlocation)->get()->toArray();
+       if(empty($maxzan)){
+          $this->notfound();
+                }
+       else{         
         $send=new editMessageText([
-            'chat_id'=>$this->update->callback_query->message->chat->id,
-            'message_id'=>$u->callback_query->message->message_id,
-            'text'=> "مکان های مورد نظر شما",
-            'parse_mode'=>'html',
-            'reply_markup'=> $this->lastplckey(),
-            ]);
+                'chat_id'=>$this->update->callback_query->message->chat->id,
+                'message_id'=>$u->callback_query->message->message_id,
+                'text'=> "مکان های مورد نظر شما",
+                'parse_mode'=>'html',
+                'reply_markup'=> $this->lastplckey($maxzan),
+                ]);
+            $send();
+       }
+  
+    }
+    public function notfound(){ 
+
+    $send=new editMessageText([
+        'chat_id'=>$this->update->callback_query->message->chat->id,
+        'message_id'=>$this->update->callback_query->message->message_id,
+        'text'=>"چنین موردی وجود ندارد " ,
+        'parse_mode'=>'html',
+        'reply_markup'=>$this->kaygnsix(),
+        ] );
         $send();
+      
     }
 
     public function placeinfo($u){
@@ -105,7 +131,7 @@ class makanyab extends Magazine{
          ]);
          $send();
          
-     }
+        }
       unset($this->meet["limite"]);
     }
      public function timesUse ($id){
@@ -125,30 +151,13 @@ class makanyab extends Magazine{
                 $arraymaxzan[$i]=$value->timestamp;
                 $i+=1;
             }
-              
-            // for($i=0;$i<count($data);$i++)
-            // {
-               
-            //     if( $dbuser[$i]==$user_id){
-            //          $y+=1; 
-            //          $maxzan[$y]=$i;
-            //          $timestamp[$y]=$data[$maxzan[$y]]->created_at->timestamp;
-                    
-            //     }
-            // } 
-        //    if(count($maxzan)!==0){
-        //     $lastid=count($maxzan);
             $today=$maxzan->last()->created_at->timestamp;
-           // $today=$data[$lastid-1]->created_at->timestamp;dd($today);
-            $yeste=$maxzan->last()->subDay()->timestamp;
-          //  $yeste=$data[$lastid-1]->created_at->subDay()->timestamp;
+            $yeste=$today-(86400);  
             for($j=0;$j<count($arraymaxzan);$j++){
             if($arraymaxzan[$j]>$yeste&&$arraymaxzan[$j]<$today){
-                //$timeuse[$x]=$arraymaxzan[$j];
                 $x+=1;
             }
-      }dd($x);
-  // }
+      }
           if ($x>5){
         
             $send=new editMessageText([
@@ -311,29 +320,7 @@ class makanyab extends Magazine{
         
             }
 
-    public function lastplckey(){
-
-        $count=\App\places::count();        
-        $idplace=$this->meet["lastid"]; 
-        $dataplc=\App\places::find($idplace);
-        if (empty($this->detect->data->loc)){
-        $idlocation=$this->detect->data->id;}
-        else{$idlocation=$this->detect->data->loc;}
-        $maxzan=[];$finalplace=[];$keys=[];
-        $maxzan= \App\places::where('parentID',$idplace)->where('locations_id',$idlocation)->get()->toArray();
-    
-        if(empty($maxzan)){
-
-            $send=new editMessageText([
-                'chat_id'=>$this->update->callback_query->message->chat->id,
-                'message_id'=>$this->update->callback_query->message->message_id,
-                'text'=>"چنین موردی وجود ندارد " ,
-                'parse_mode'=>'html',
-                'reply_markup'=>$this->kaygnsix(),
-                ] );
-                $send();
-        }
-        
+    public function lastplckey($maxzan){
         if(count($maxzan)%2==1){   
             for($r=0;$r<count($maxzan)-2;$r+=2){
                 
@@ -429,8 +416,10 @@ class makanyab extends Magazine{
                         ],   
                     ];
 
-            }
+           } 
+           
     return json_encode(["inline_keyboard"=> $keys ]);
+      
 }
 
 public function plcinfokey(){
