@@ -12,7 +12,7 @@ use XB\telegramObjects\KeyboardButton;
 class start extends Magazine {
 
 	public function showMenu( $u ) {
-
+		
 		unset($this->meet["placename"]);
 		if (empty($this->update->message->chat->id))
         { 
@@ -69,14 +69,12 @@ class start extends Magazine {
 	   }
 	}
 	public function registerplace( $u ){
-
+		unset($this->meet["editplc"]);
 		unset($this->meet["placename"]);
 		$user_id=$this->update->message->chat->id;
 		$dbuser=\App\regplaceUser::pluck('user_id')->toArray();
 		$serch=array_search($user_id,$dbuser);
-		// \App\regplaceUser::insert(
-        //     ['user_id'=>$user_id]
-		// 	); 
+		
 		if ($serch===false&&$serch!==0){
 		$data=\App\regplaceUser::get();
 		$dbuser=\App\regplaceUser::pluck('user_id')->toArray();

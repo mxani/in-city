@@ -80,16 +80,16 @@ class makanyab extends Magazine{
     }
     public function notfound(){ 
 
-    $send=new editMessageText([
-        'chat_id'=>$this->update->callback_query->message->chat->id,
-        'message_id'=>$this->update->callback_query->message->message_id,
-        'text'=>"چنین موردی وجود ندارد " ,
-        'parse_mode'=>'html',
-        'reply_markup'=>$this->kaygnsix(),
-        ] );
+         $send=new editMessageText([
+            'chat_id'=>$this->update->callback_query->message->chat->id,
+            'message_id'=>$this->update->callback_query->message->message_id,
+            'text'=>"چنین موردی وجود ندارد " ,
+            'parse_mode'=>'html',
+            'reply_markup'=>$this->kaygnsix(),
+            ] );
         $send();
       
-    }
+          }
 
     public function placeinfo($u){
        $id=$this->detect->data->id;
@@ -105,7 +105,7 @@ class makanyab extends Magazine{
         'reply_markup'=> $this->plcinfokey(),
         
         ]);
-    $send();
+      $send();
 
     }
     public function contactinfo ($u){
@@ -171,7 +171,7 @@ class makanyab extends Magazine{
                $this->meet["limite"]="yes";
             }
         
-     }
+    }
     public function catkey(){
         $keys=[];
         if (!empty($this->update->message->chat->id)) {
@@ -183,8 +183,9 @@ class makanyab extends Magazine{
            
         }
         $catserch=\App\categories::where("parentID",$j)->get();
-        for($i=0;$i<count($catserch);$i++){ 
+        for($i=0;$i<count($catserch);$i+=2){ 
            $this->meet["i"]=$i;
+            if(count($catserch)%2==0){
                 $keys[]=[
                     [
                         "text"=>$catserch[$i]->Category,
@@ -193,8 +194,54 @@ class makanyab extends Magazine{
                             "path"=>"makanyab@makanemoredenazar",
                             
                         ])
+                        ],
+                 
+                    [
+                        "text"=>$catserch[$i+1]->Category,
+                        "callback_data"=>interlink([
+                            "id"=>$catserch[$i+1]->id,
+                            "path"=>"makanyab@makanemoredenazar",
+                            
+                        ])
                     ]
-                ];       
+                ];     
+            }
+            else{
+         
+                if($i<count($catserch)-2){   
+                $keys[]=[
+                    [
+                        "text"=>$catserch[$i]->Category,
+                        "callback_data"=>interlink([
+                            "id"=>$catserch[$i]->id,
+                            "path"=>"makanyab@makanemoredenazar",
+                            
+                        ])
+                        ],
+                
+                    [
+                        "text"=>$catserch[$i+1]->Category,
+                        "callback_data"=>interlink([
+                            "id"=>$catserch[$i+1]->id,
+                            "path"=>"makanyab@makanemoredenazar",
+                            
+                        ])
+                    ]
+                ];   
+                }
+                else{
+                    $keys[]=[
+                        [
+                            "text"=>$catserch[$i]->Category,
+                            "callback_data"=>interlink([
+                                "id"=>$catserch[$i]->id,
+                                "path"=>"makanyab@makanemoredenazar",
+                                
+                            ])
+                            ] 
+                        ]; 
+                }
+           }
         }
         $parentID=\App\categories::find($j)->parentID??0;
        if($j!==0&&$parentID!==0){
@@ -220,10 +267,18 @@ class makanyab extends Magazine{
         $id=$this->detect->data->id;
         $parentID=\App\categories::find($id)->parentID;
         $a=[];
-        if($count%2==0){   
-            for($i=0;$i<$count-1;$i+=2){
-    
+        $leftover=$count%3;
+            for($i=0;$i<$count;$i+=3){ 
+                if(($i<$count-2&&$leftover==2)||($i<$count-1&&$leftover==1)||($leftover==0)){   
                 $keys[]=[
+                    [
+                        "text"=>\App\locations::find($i+3)->local,
+                        "callback_data"=>interlink([
+                            "id"=>\App\locations::find($i+3)->id,
+                            "path"=>"makanyab@lastplace",
+                            "lastid"=>$this->detect->data->id
+                        ])
+                    ],
                     [
                         "text"=>\App\locations::find($i+2)->local,
                         "callback_data"=>interlink([
@@ -231,7 +286,7 @@ class makanyab extends Magazine{
                             "path"=>"makanyab@lastplace",
                             "lastid"=>$this->detect->data->id
                         ])
-                        ],
+                    ],
                     [
                         "text"=>\App\locations::find($i+1)->local,
                         "callback_data"=>interlink([
@@ -240,82 +295,61 @@ class makanyab extends Magazine{
                             "lastid"=>$this->detect->data->id
                         ])
                     ]
-                ];  
-        } 
-                    $keys[]=[
-                        [
                     
-                    "text"=>"back",
-                    "callback_data"=>interlink([
-                        "text"=>"back",
-                        "path"=>"makanyab@makanemoredenazar", 
-                        "id"=>0,
-
-                    ])
-                    ],
-                    [
-                        
-                        "text"=>"back one step",
-                        "callback_data"=>interlink([
-                            "path"=>"makanyab@makanemoredenazar",
-                            "id"=>$parentID,
-                        ])
-                        ],
-                    ];
-                } 
-        if($count%2==1){ 
-            
-            for($i=1;$i<=$count-2;$i+=2){
+                ];  
+                }
+                if($leftover==1&&$i==$count-1){
                     $keys[]=[
                         [
                             "text"=>\App\locations::find($i+1)->local,
                             "callback_data"=>interlink([
                                 "id"=>\App\locations::find($i+1)->id,
                                 "path"=>"makanyab@lastplace",
-                                "lastid"=>$this->detect->data->id,
-                            ])
-                            ],
-                        [
-                            "text"=>\App\locations::find($i+2)->local,
-                            "callback_data"=>interlink([
-                                "id"=>\App\locations::find($i+2)->id,
-                                "path"=>"makanyab@lastplace",
-                                "lastid"=>$this->detect->data->id,
+                                "lastid"=>$this->detect->data->id
                             ])
                         ]
-                    ];  
-            } 
-
+                            ];
+                }
+                if($leftover==2&&$i==$count-2){   
                     $keys[]=[
                         [
-                            "text"=>\App\locations::find($count)->local,
+                            "text"=>\App\locations::find($i+1)->local,
                             "callback_data"=>interlink([
-                                "id"=>\App\locations::find($count)->id,
+                                "id"=>\App\locations::find($i+1)->id,
                                 "path"=>"makanyab@lastplace",
-                                "lastid"=>$this->detect->data->id,
-                    ])
-                    ]
-                    ];
-                        $keys[]=[
-                            [
-                        
-                        "text"=>"back",
-                        "callback_data"=>interlink([
-                            "text"=>"back",
-                            "path"=>"makanyab@makanemoredenazar", 
-                        ])
-                        ],
-                        [
-                            
-                            "text"=>"back one step",
-                            "callback_data"=>interlink([
-                                "path"=>"makanyab@makanemoredenazar",
-                                "id"=>$parentID,
+                                "lastid"=>$this->detect->data->id
                             ])
                             ],
-                        ];
-                    }
+                            [
+                                "text"=>\App\locations::find($i+2)->local,
+                                "callback_data"=>interlink([
+                                    "id"=>\App\locations::find($i+2)->id,
+                                    "path"=>"makanyab@lastplace",
+                                    "lastid"=>$this->detect->data->id
+                                ])
+                            ]
+                            ];
 
+                }
+        }
+        $keys[]=[
+            [
+        
+        "text"=>"back",
+        "callback_data"=>interlink([
+            "text"=>"back",
+            "path"=>"makanyab@makanemoredenazar", 
+        ])
+        ],
+        [
+            
+            "text"=>"back one step",
+            "callback_data"=>interlink([
+                "path"=>"makanyab@makanemoredenazar",
+                "id"=>$parentID,
+            ])
+            ],
+        ];
         return json_encode(["inline_keyboard"=> $keys ]);
         
             }
