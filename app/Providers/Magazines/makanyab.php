@@ -21,19 +21,31 @@ class makanyab extends Magazine{
 
        if($this->detect->type=='callback_query'){
             $id=$this->detect->data->id;
+            $this->meet["cat"][0]="دسته ها";
+            if(!empty($this->detect->data->text)&&$this->detect->data->text=="back"){
+             
+                array_pop($this->meet["cat"]);
+                $message['text']=" دنبال چی  می گردی"."\n".implode("->",$this->meet["cat"]);
+            }
+            else{
+                if ($id!=0){  
+                    $cat=\App\categories::find($id)->Category;
+                    array_push($this->meet["cat"],$cat);
+                    $message['text']=" دنبال چی  می گردی"."\n".implode("->",$this->meet["cat"]);
+                }
+            }
 
-            $cat=\App\categories::find($id)->Category;
-            array_push($this->meet["cat"],$cat);
             $message['message_id']=$this->update->callback_query->message->message_id;
-            $message['text']=" دنبال چی  می گردی"."\n".implode("->",$this->meet["cat"]);
-
+          
             if (!empty(\App\categories::where("parentID",$id)->first())) {
                 $send=editMessageText::class;
                 $send= new $send($message);
                 $send();
             }
             else{
+               
                $this->local();
+               unset($this->meet["cat"]);
             }
          }
          else{
@@ -263,6 +275,7 @@ class makanyab extends Magazine{
              [
                 "text"=>"بازگشت",
                 "callback_data"=>interlink([
+                   "text"=>"back",
                    "id"=>$parentID,
                    "path"=>"makanyab@makanemoredenazar",
                   
