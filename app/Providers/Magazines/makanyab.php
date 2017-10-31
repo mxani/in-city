@@ -21,7 +21,10 @@ class makanyab extends Magazine{
 
        if($this->detect->type=='callback_query'){
             $id=$this->detect->data->id;
+            $cat=\App\categories::find($id)->Category;
+            array_push($this->meet["cat"],$cat);
             $message['message_id']=$this->update->callback_query->message->message_id;
+            $message['text']=" دنبال چی  می گردی"."\n".implode("->",$this->meet["cat"]);
             if (!empty(\App\categories::where("parentID",$id)->first())) {
                 $send=editMessageText::class;
                 $send= new $send($message);
@@ -89,7 +92,7 @@ class makanyab extends Magazine{
             ] );
         $send();
       
-          }
+    }
 
     public function placeinfo($u){
        $id=$this->detect->data->id;
@@ -108,6 +111,7 @@ class makanyab extends Magazine{
       $send();
 
     }
+
     public function contactinfo ($u){
         $this->meet["correction"]="yes";
         $id=$this->detect->data->id;
@@ -117,10 +121,15 @@ class makanyab extends Magazine{
         }
         else{
         $data=\App\places::where("id", $id)->get()->first();
-        $text= "مکان:". $data->place."\n".
+        $location=\App\locations::where("id",  $data->locations_id)->get()->first();
+        $categori=\App\categories::where("id",  $data->parentID)->get()->first();
+        $text="<a href=\"$data->pic\">&#8205;</a>\n ".
+               "مکان:". $data->place."\n".
                "تلفن تماس:".$data->phone."\n".
                "ادرس:".$data->adress."\n".
-               "صفحه وب".$data->webpage."\n";    
+               "صفحه وب".$data->webpage."\n".   
+               "دسته:".$categori->Category."\n".
+               "محله:".$location->local."\n";
         $send=new editMessageText([
          'chat_id'=>$this->update->callback_query->message->chat->id,
          'message_id'=>$u->callback_query->message->message_id,
@@ -134,7 +143,8 @@ class makanyab extends Magazine{
         }
       unset($this->meet["limite"]);
     }
-     public function timesUse ($id){
+
+    public function timesUse ($id){
 
          $user_id=$this->update->callback_query->message->chat->id;
          $count=\App\timesUse::count();
@@ -172,6 +182,7 @@ class makanyab extends Magazine{
             }
         
     }
+
     public function catkey(){
         $keys=[];
         if (!empty($this->update->message->chat->id)) {
@@ -352,7 +363,7 @@ class makanyab extends Magazine{
         ];
         return json_encode(["inline_keyboard"=> $keys ]);
         
-            }
+    }
 
     public function lastplckey($maxzan){
         if(count($maxzan)%2==1){   
@@ -452,36 +463,13 @@ class makanyab extends Magazine{
 
            } 
            
-    return json_encode(["inline_keyboard"=> $keys ]);
+     return json_encode(["inline_keyboard"=> $keys ]);
       
-}
+    }
 
-public function plcinfokey(){
-    $id=$this->detect->data->id;
-    $locationID=\App\places::where("id", $id)->get()->first()->locations_id;
-    $keys[]=[
-     
-        [
-      
-      "text"=>"back to first menue",
-      "callback_data"=>interlink([
-          "text"=>"back",
-          "path"=>"makanyab@makanemoredenazar", 
-          "id"=>0,
-      ])
-      ],
-    
-      [
-          
-          "text"=>"back one step",
-          "callback_data"=>interlink([
-              "path"=>"makanyab@lastplace",
-              "loc"=>$locationID,
-              "cor"=>"1",
-          ])
-          ],   
-    ];
- 
+    public function plcinfokey(){
+        $id=$this->detect->data->id;
+        $locationID=\App\places::where("id", $id)->get()->first()->locations_id;
         $keys[]=[
             [
                 "text"=>"contact info",
@@ -492,56 +480,78 @@ public function plcinfokey(){
             ])
             ]
         ];
-       
-  
-    return json_encode(["inline_keyboard"=> $keys ]);
-}
-
-public function kaygnsix(){
-   
-    $id=$this->detect->data->id;
-    $locationID=\App\places::where("id", $id=$this->detect->data->id)->get()->first()->locations_id;
-    $keys[]=[
-     
-        [
-      
-      "text"=>"back to first menue",
-      "callback_data"=>interlink([
-          "text"=>"back",
-          "path"=>"makanyab@makanemoredenazar", 
-          "id"=>0,
-      ])
-      ],
-    ];
-    if (!empty($this->detect->data->lastid)){
-    $keys[]=[
-      [
-          
-          "text"=>"back one step",
-          "callback_data"=>interlink([
-            "path"=>"makanyab@local",
-            "id"=>$this->meet["lastid"],
-            
-          ])
-          ],   
-    ];
-}
-    else{
+    
         $keys[]=[
             [
-                
-                "text"=>"back ystep",
-                "callback_data"=>interlink([
-                    "path"=>"makanyab@lastplace",
-                    "loc"=>$locationID,
-                    "cor"=>"1",
-                ])
+        
+        "text"=>"back to first menue",
+        "callback_data"=>interlink([
+            "text"=>"back",
+            "path"=>"makanyab@makanemoredenazar", 
+            "id"=>0,
+        ])
+        ],
+        
+        [
+            
+            "text"=>"back one step",
+            "callback_data"=>interlink([
+                "path"=>"makanyab@lastplace",
+                "loc"=>$locationID,
+                "cor"=>"1",
+            ])
             ],   
         ];
     
-}    
     
-    return json_encode(["inline_keyboard"=> $keys ]);
-}
+        return json_encode(["inline_keyboard"=> $keys ]);
+    }
+
+    public function kaygnsix(){
+   
+        $id=$this->detect->data->id;
+        $locationID=\App\places::where("id", $id=$this->detect->data->id)->get()->first()->locations_id;
+        $keys[]=[
+        
+            [
+        
+        "text"=>"back to first menue",
+        "callback_data"=>interlink([
+            "text"=>"back",
+            "path"=>"makanyab@makanemoredenazar", 
+            "id"=>0,
+        ])
+        ],
+        ];
+        if (!empty($this->detect->data->lastid)){
+        $keys[]=[
+        [
+            
+            "text"=>"back one step",
+            "callback_data"=>interlink([
+                "path"=>"makanyab@local",
+                "id"=>$this->meet["lastid"],
+                
+            ])
+            ],   
+        ];
+         }
+        else{
+            $keys[]=[
+                [
+                    
+                    "text"=>"back ystep",
+                    "callback_data"=>interlink([
+                        "path"=>"makanyab@lastplace",
+                        "loc"=>$locationID,
+                        "cor"=>"1",
+                    ])
+                ],   
+            ];
+        
+        }    
+    
+         return json_encode(["inline_keyboard"=> $keys ]);
+    }
                     
 } 
