@@ -45,7 +45,7 @@ class makanyab extends Magazine{
             else{
                
                $this->local();
-               unset($this->meet["cat"]);
+              // unset($this->meet["cat"]);
             }
          }
          else{
@@ -57,11 +57,11 @@ class makanyab extends Magazine{
     }
 
     public function local(){ 
-     
+       
         $send=new editMessageText([
             'chat_id'=>$this->update->callback_query->message->chat->id,
             'message_id'=>$this->update->callback_query->message->message_id,
-            'text'=> "کجا می خوای بگردی ",
+            'text'=> "کجا می خوای بگردی "."\n".implode("->",$this->meet["cat"]),
             'parse_mode'=>'html',
             'reply_markup'=> $this->localkey(),
             ]);
@@ -84,11 +84,18 @@ class makanyab extends Magazine{
        if(empty($maxzan)){
           $this->notfound();
                 }
-       else{         
+       else{  
+         if(!empty($this->detect->data->text)&&$this->detect->data->text=="back"){
+             $id=$this->detect->data->loc;}
+        else{
+                $id=$this->detect->data->id;
+            }   
+       $location=\App\locations::find($id)->local;//dd($location);  
+
         $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,
                 'message_id'=>$u->callback_query->message->message_id,
-                'text'=> "مکان های مورد نظر شما",
+                'text'=> "مکان های مورد نظر شما".implode("->",$this->meet["cat"])."\n"." محله:  " .$location,
                 'parse_mode'=>'html',
                 'reply_markup'=> $this->lastplckey($maxzan),
                 ]);
@@ -362,7 +369,7 @@ class makanyab extends Magazine{
         $keys[]=[
             [
         
-        "text"=>"back",
+        "text"=>"back to first",
         "callback_data"=>interlink([
             "text"=>"back",
             "path"=>"makanyab@makanemoredenazar", 
@@ -370,10 +377,11 @@ class makanyab extends Magazine{
         ],
         [
             
-            "text"=>"back one step",
+            "text"=>"back",
             "callback_data"=>interlink([
                 "path"=>"makanyab@makanemoredenazar",
                 "id"=>$parentID,
+                 "text"=>"back",
             ])
             ],
         ];
@@ -427,10 +435,11 @@ class makanyab extends Magazine{
                     ],
                     [
                         
-                        "text"=>"back one step",
+                        "text"=>"back",
                         "callback_data"=>interlink([
                             "path"=>"makanyab@local",
                             "id"=>$maxzan[0]['parentID'],
+                             "text"=>"back",
                         ])
                         ],   
                     ];
@@ -469,10 +478,11 @@ class makanyab extends Magazine{
                     ],
                     [
                         
-                        "text"=>"back one step",
+                        "text"=>"back",
                         "callback_data"=>interlink([
                             "path"=>"makanyab@local",
                             "id"=>$maxzan[0]['parentID'],
+                             "text"=>"back",
                         ])
                         ],   
                     ];
@@ -510,9 +520,10 @@ class makanyab extends Magazine{
         
         [
             
-            "text"=>"back one step",
+            "text"=>"back",
             "callback_data"=>interlink([
                 "path"=>"makanyab@lastplace",
+                "text"=>"back",
                 "loc"=>$locationID,
                 "cor"=>"1",
             ])
@@ -543,10 +554,11 @@ class makanyab extends Magazine{
         $keys[]=[
         [
             
-            "text"=>"back one step",
+            "text"=>"back",
             "callback_data"=>interlink([
                 "path"=>"makanyab@local",
                 "id"=>$this->meet["lastid"],
+                 "text"=>"back",
                 
             ])
             ],   
@@ -556,9 +568,10 @@ class makanyab extends Magazine{
             $keys[]=[
                 [
                     
-                    "text"=>"back ystep",
+                    "text"=>"back",
                     "callback_data"=>interlink([
                         "path"=>"makanyab@lastplace",
+                        "text"=>"back",
                         "loc"=>$locationID,
                         "cor"=>"1",
                     ])
