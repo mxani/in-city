@@ -10,7 +10,7 @@ use XB\telegramMethods\editMessageReplyMarkup;
 class makanyab extends Magazine{
 
     public function makanemoredenazar(){
-      
+
         $send=sendMessage::class;
         $message=[
             'chat_id'=>$this->detect->from->id,
@@ -21,10 +21,12 @@ class makanyab extends Magazine{
 
        if($this->detect->type=='callback_query'){
             $id=$this->detect->data->id;
+
             $cat=\App\categories::find($id)->Category;
             array_push($this->meet["cat"],$cat);
             $message['message_id']=$this->update->callback_query->message->message_id;
             $message['text']=" دنبال چی  می گردی"."\n".implode("->",$this->meet["cat"]);
+
             if (!empty(\App\categories::where("parentID",$id)->first())) {
                 $send=editMessageText::class;
                 $send= new $send($message);
@@ -35,6 +37,7 @@ class makanyab extends Magazine{
             }
          }
          else{
+            $messege['text']= " دنبال چی  می گردی";
             $send= new $send($message);
             $send();
          }
@@ -155,7 +158,7 @@ class makanyab extends Magazine{
          \App\timesUse::insert(
             ['user_id'=>$user_id,'placeID'=>$id,"created_at"=>$time]
             );  
-            $maxzan=\App\timesUse::where('user_id', $user_id)->get();
+            $maxzan=\App\timesUse::where('user_id', $user_id)->get(); 
             $arraymaxzan=$maxzan->pluck('created_at');
             foreach ($arraymaxzan as $value) {
                 $arraymaxzan[$i]=$value->timestamp;
