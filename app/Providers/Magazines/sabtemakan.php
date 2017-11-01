@@ -44,6 +44,10 @@ class sabtemakan extends Magazine
     {
         if (!empty($this->detect->data->from)) {
             $this->meet["recorde[6]"]=$this->detect->data->id;
+                $j=0;
+        }
+         else {
+            $j=$this->detect->data->id;
         }
             $data=\App\categories::get();
             $parentID=\App\categories::pluck('parentID')->toArray();
@@ -54,9 +58,9 @@ class sabtemakan extends Magazine
                 'message_id'=>$this->update->callback_query->message->message_id,
                 'text'=>"مکان مورد نظر شما در کدام دسته جای دارد ",
                 'parse_mode'=>'html',
-                'reply_markup'=> $this->catkey(),
+                'reply_markup'=> $a=view('categorykey',['data'=>$data,'parentID'=>$parentID,'j'=>$j])->render(),
                 ]);
-                $send();
+                $send();dd($a);
             }
             else { 
                 if (!empty($this->meet["editplc"])&&$this->meet["editplc"]==1){
