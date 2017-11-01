@@ -36,7 +36,7 @@ public function editeplcinfo(){
         'message_id'=>$this->update->callback_query->message->message_id,
         'text'=>$text,
         'parse_mode'=>'html',
-        'reply_markup'=> $this->itemkay(),
+        'reply_markup'=>view('editplacekey')->render()
     ] );
         $send();
  } 
@@ -45,7 +45,7 @@ public function editeplcinfo(){
         'chat_id'=>$this->update->message->chat->id,
         'text'=>$text,
         'parse_mode'=>'html',
-        'reply_markup'=> $this->itemkay(),
+        'reply_markup'=>view('editplacekey')->render()
     ] );
         $send(); 
     }
@@ -161,61 +161,5 @@ public function editeplace(){
          $this->editeplcinfo();
     }
  
-    public function itemkay()
-    {
-        $keys=[];
-                $keys[]=[
-                  [
-                        "text"=>"ویرایش نام مکان",
-                        "callback_data"=>interlink([
-                            "path"=>"editeplc@editeplace",
-                        ])
-                    ],
-                    [
-                        "text"=>"ویرایش تلفن",
-                        "callback_data"=>interlink([
-                            "path"=>"editeplc@editephone",
-                        ])
-                    ]
-                        ];
-                $keys[]=[
-                    [
-                        "text"=>"ویرایش آدرس",
-                        "callback_data"=>interlink([
-                            "path"=>"editeplc@editeadress",
-                        ])
-                    ],
-                    [
-                        "text"=>"ویرایش وب",
-                        "callback_data"=>interlink([
-                            "path"=>"editeplc@editeweb",
-                        ])
-                    ]
-                ];
-                $keys[]=[
-                    [
-                        "text"=>"ویرایش عکس",
-                        "callback_data"=>interlink([
-                            "path"=>"editeplc@editepic",
-                        ])
-                    ],
-                    [
-                        "text"=>"ویرایش محله و دسته",
-                        "callback_data"=>interlink([
-                            "path"=>"sabtemakan@local",
-                            
-                        ])
-                    ]
-                ];
-                $keys[]=[
-                    [
-                        "text"=>"بازگشت",
-                        "callback_data"=>interlink([
-                            "path"=>"start@showMenu",
-                        ])
-                    ] ];
-            
-        return json_encode(["inline_keyboard"=> $keys ]);
-  }
-    
+   
 }

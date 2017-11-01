@@ -14,6 +14,8 @@ class sabtemakan extends Magazine
 
     public function local($u)
     {
+        $data=\App\locations::get();//add
+        $local=\App\locations::pluck('local')->toArray();//add
         unset($this->meet["placename"]);
         if (empty($this->update->message->chat->id))
         { 
@@ -22,7 +24,7 @@ class sabtemakan extends Magazine
             'message_id'=>$this->update->callback_query->message->message_id,
                'text'=> "مکانی که می خوای ثبت کنی کجاهاست؟ ",
                'parse_mode'=>'html',
-               'reply_markup'=> $this->kaygntthree(),
+               'reply_markup'=>view('locationkey',['data'=>$data,'local'=>$local])->render(),
                ]);
            $send();
          }
@@ -31,9 +33,10 @@ class sabtemakan extends Magazine
                 'chat_id'=>$this->update->message->chat->id,
                    'text'=> "مکانی که می خوای ثبت کنی کجاهاست؟ ",
                    'parse_mode'=>'html',
-                   'reply_markup'=> $this->kaygntthree(),
+                   'reply_markup'=>view('locationkey',['data'=>$data,'local'=>$local])->render(),
                    ]);
                $send(); 
+            
          }
     }
 

@@ -25,13 +25,13 @@ class makanyab extends Magazine{
             if(!empty($this->detect->data->text)&&$this->detect->data->text=="b"){
             
                 array_pop($this->meet["cat"]);
-                $message['text']=" دنبال چی  می گردی"."\n".implode("->",$this->meet["cat"]);
+                $message['text']=" دنبال چی  می گردی"."\n".implode("<code> » </code>",$this->meet["cat"]);
             }
             else{
                 if ($id!=0){  
                     $cat=\App\categories::find($id)->Category;
                     array_push($this->meet["cat"],$cat);
-                    $message['text']=" دنبال چی  می گردی"."\n".implode("->",$this->meet["cat"]);
+                    $message['text']=" دنبال چی  می گردی"."\n".implode("<code> » </code>",$this->meet["cat"]);
                 }
                 else{
                     unset($this->meet["cat"]);
