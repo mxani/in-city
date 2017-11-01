@@ -11,6 +11,9 @@ $this->trigger(function(&$u){
 },'start@aboutUs');
 
 $this->trigger(function(&$u){
+if(!empty($u->message->text) && $u->message->text=='جستجو مکان'){
+unset($this->meet['cat']);
+}
     return !empty($u->message->text) && $u->message->text=='جستجو مکان';
 },'makanyab@makanemoredenazar');
 

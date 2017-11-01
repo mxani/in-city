@@ -12,7 +12,7 @@ use XB\telegramObjects\KeyboardButton;
 class start extends Magazine {
 
 	public function showMenu( $u ) {
-		
+		unset($this->meet["cat"]);
 		unset($this->meet["placename"]);
 		if (empty($this->update->message->chat->id))
         { 

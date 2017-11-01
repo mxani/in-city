@@ -22,8 +22,8 @@ class makanyab extends Magazine{
        if($this->detect->type=='callback_query'){
             $id=$this->detect->data->id;
             $this->meet["cat"][0]="دسته ها";
-            if(!empty($this->detect->data->text)&&$this->detect->data->text=="back"){
-             
+            if(!empty($this->detect->data->text)&&$this->detect->data->text=="b"){
+            
                 array_pop($this->meet["cat"]);
                 $message['text']=" دنبال چی  می گردی"."\n".implode("->",$this->meet["cat"]);
             }
@@ -32,6 +32,9 @@ class makanyab extends Magazine{
                     $cat=\App\categories::find($id)->Category;
                     array_push($this->meet["cat"],$cat);
                     $message['text']=" دنبال چی  می گردی"."\n".implode("->",$this->meet["cat"]);
+                }
+                else{
+                    unset($this->meet["cat"]);
                 }
             }
 
@@ -85,7 +88,7 @@ class makanyab extends Magazine{
           $this->notfound();
                 }
        else{  
-         if(!empty($this->detect->data->text)&&$this->detect->data->text=="back"){
+         if(!empty($this->detect->data->text)&&$this->detect->data->text=="b"){
              $id=$this->detect->data->loc;}
         else{
                 $id=$this->detect->data->id;
@@ -207,13 +210,13 @@ class makanyab extends Magazine{
 
     public function catkey(){
         $keys=[];
-        if (!empty($this->update->message->chat->id)) {
-            $j=0;
+        
+        if ($this->detect->type=='callback_query') {
+          $j=$this->detect->data->id;
         }
-        else {
-           
-            $j=$this->detect->data->id;
-           
+        else { 
+
+          $j=0;
         }
         $catserch=\App\categories::where("parentID",$j)->get();
         for($i=0;$i<count($catserch);$i+=2){ 
@@ -282,7 +285,7 @@ class makanyab extends Magazine{
              [
                 "text"=>"بازگشت",
                 "callback_data"=>interlink([
-                   "text"=>"back",
+                   "text"=>"b",
                    "id"=>$parentID,
                    "path"=>"makanyab@makanemoredenazar",
                   
@@ -373,6 +376,7 @@ class makanyab extends Magazine{
         "callback_data"=>interlink([
             "text"=>"back",
             "path"=>"makanyab@makanemoredenazar", 
+            "id"=>0,
         ])
         ],
         [
@@ -381,7 +385,7 @@ class makanyab extends Magazine{
             "callback_data"=>interlink([
                 "path"=>"makanyab@makanemoredenazar",
                 "id"=>$parentID,
-                 "text"=>"back",
+                "text"=>"b",
             ])
             ],
         ];
@@ -439,7 +443,7 @@ class makanyab extends Magazine{
                         "callback_data"=>interlink([
                             "path"=>"makanyab@local",
                             "id"=>$maxzan[0]['parentID'],
-                             "text"=>"back",
+                             "text"=>"b",
                         ])
                         ],   
                     ];
@@ -482,7 +486,7 @@ class makanyab extends Magazine{
                         "callback_data"=>interlink([
                             "path"=>"makanyab@local",
                             "id"=>$maxzan[0]['parentID'],
-                             "text"=>"back",
+                             "text"=>"b",
                         ])
                         ],   
                     ];
@@ -523,7 +527,7 @@ class makanyab extends Magazine{
             "text"=>"back",
             "callback_data"=>interlink([
                 "path"=>"makanyab@lastplace",
-                "text"=>"back",
+                "text"=>"b",
                 "loc"=>$locationID,
                 "cor"=>"1",
             ])
@@ -558,7 +562,7 @@ class makanyab extends Magazine{
             "callback_data"=>interlink([
                 "path"=>"makanyab@local",
                 "id"=>$this->meet["lastid"],
-                 "text"=>"back",
+                 "text"=>"b",
                 
             ])
             ],   
@@ -571,7 +575,7 @@ class makanyab extends Magazine{
                     "text"=>"back",
                     "callback_data"=>interlink([
                         "path"=>"makanyab@lastplace",
-                        "text"=>"back",
+                        "text"=>"b",
                         "loc"=>$locationID,
                         "cor"=>"1",
                     ])
