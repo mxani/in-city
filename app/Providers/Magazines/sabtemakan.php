@@ -14,8 +14,8 @@ class sabtemakan extends Magazine
 
     public function local($u)
     {
-        $data=\App\locations::get();//add
-        $local=\App\locations::pluck('local')->toArray();//add
+        $data=\App\locations::get();
+        $local=\App\locations::pluck('local')->toArray();
         unset($this->meet["placename"]);
         if (empty($this->update->message->chat->id))
         { 
@@ -49,42 +49,46 @@ class sabtemakan extends Magazine
          else {
             $j=$this->detect->data->id;
         }
-            $data=\App\categories::get();
-            $parentID=\App\categories::pluck('parentID')->toArray();
-            $id=$this->detect->data->id;
-            if (!empty(array_search($id, $parentID))||!empty($this->detect->data->from)) {
-                $send=new editMessageText([
+        
+        $catserch=\App\categories::where("parentID",$j)->get()->toArray();//dd($catserch[1]['Category']);
+        $count=count($catserch);
+   //     $data=\App\categories::get();
+    //    $parentID=\App\categories::pluck('parentID')->toArray();
+        $id=$this->detect->data->id;
+        if (!empty($catserch)||!empty($this->detect->data->from)) {
+           
+            $send=new editMessageText([
+            'chat_id'=>$this->update->callback_query->message->chat->id,
+            'message_id'=>$this->update->callback_query->message->message_id,
+            'text'=>"مکان مورد نظر شما در کدام دسته جای دارد ",
+            'parse_mode'=>'html',
+            'reply_markup'=>view('categorykey',['catserch'=>$catserch,'count'=>$count])->render(),
+            ]);
+            $send();
+        }
+        else { 
+            if (!empty($this->meet["editplc"])&&$this->meet["editplc"]==1){
+                $this->meet["recorde[5]"]=$this->detect->data->id ;
+                $user_id=$this->update->callback_query->message->chat->id;
+                unset($this->meet["editplc"]);
+                \App\places::
+                where('user_id',$user_id)
+                ->update(['locations_id'=> $this->meet["recorde[6]"],'parentID'=>$this->meet["recorde[5]"]]);
+                $this->caller(editeplc::class)->editeplcinfo();
+                return; 
+            }
+            $this->meet["recorde[5]"]=$this->detect->data->id ;
+            $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,
                 'message_id'=>$this->update->callback_query->message->message_id,
-                'text'=>"مکان مورد نظر شما در کدام دسته جای دارد ",
+                'text'=>"نام مکان مورد نظر خود را وارد کنید ",
                 'parse_mode'=>'html',
-                'reply_markup'=> $a=view('categorykey',['data'=>$data,'parentID'=>$parentID,'j'=>$j])->render(),
+                
                 ]);
-                $send();dd($a);
-            }
-            else { 
-                if (!empty($this->meet["editplc"])&&$this->meet["editplc"]==1){
-                    $this->meet["recorde[5]"]=$this->detect->data->id ;
-                    $user_id=$this->update->callback_query->message->chat->id;
-                    unset($this->meet["editplc"]);
-                    \App\places::
-                    where('user_id',$user_id)
-                    ->update(['locations_id'=> $this->meet["recorde[6]"],'parentID'=>$this->meet["recorde[5]"]]);
-                    $this->caller(editeplc::class)->editeplcinfo();
-                   return; 
-                }
-                $this->meet["recorde[5]"]=$this->detect->data->id ;
-                $send=new editMessageText([
-                    'chat_id'=>$this->update->callback_query->message->chat->id,
-                    'message_id'=>$this->update->callback_query->message->message_id,
-                    'text'=>"نام مکان مورد نظر خود را وارد کنید ",
-                    'parse_mode'=>'html',
-                    
-                    ]);
-                $send();
-                $this->meet["placename"]=1; 
-            }
-       
+            $send();
+            $this->meet["placename"]=1; 
+        }
+    
    }
     
     public function namereg($u)
@@ -197,72 +201,6 @@ class sabtemakan extends Magazine
             }
             }
 
-    
-    public function kaygntthree()
-    {
-        
-            $data=\App\locations::get();
-            $keys=[];
-            $local=\App\locations::pluck('local')->toArray();
-        if (count($data)%2==0) {
-            for ($i=0; $i<count($data)-1; $i+=2) {
-                   $keys[]=[
-                       [
-                           "text"=>$local[$i],
-                           "callback_data"=>interlink([
-                               "id"=>$data[$i]->id,
-                               "path"=>"sabtemakan@regplace",
-                               "from"=>"local"
-                           ])
-                           ],
-                       [
-                           "text"=>$local[$i+1],
-                           "callback_data"=>interlink([
-                               "id"=>$data[$i+1]->id,
-                               "path"=>"sabtemakan@regplace",
-                               "from"=>"local"
-                           ])
-                       ]
-                   ];
-            }
-        }
-        if (count($data)%2==1) {
-            for ($i=1; $i<=count($data)-2; $i+=2) {
-                $keys[]=[
-                    [
-                        "text"=>$local[$i],
-                        "callback_data"=>interlink([
-                            "id"=>$data[$i]->id,
-                            "path"=>"sabtemakan@regplace",
-                            "from"=>"local"
-                        ])
-                        ],
-                    [
-                        "text"=>$local[$i+1],
-                        "callback_data"=>interlink([
-                                "id"=>$data[$i+1]->id,
-                                "path"=>"sabtemakan@regplace",
-                                "from"=>"local"
-                            ])
-                        ]
-                    ];
-            }
-
-                  $keys[]=[
-                      [
-                          "text"=>$local[count($data)-1],
-                          "callback_data"=>interlink([
-                              "id"=>$data[count($data)-1]->id,
-                              "path"=>"sabtemakan@regplace",
-                              "from"=>"local"
-                          ])
-                      ]
-                  ];
-        }
-   
-                            
-            return json_encode(["inline_keyboard"=> $keys ]);
-    }
 
     public function catkey()
     {
