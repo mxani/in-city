@@ -122,6 +122,7 @@ class makanyab extends Magazine{
 
     public function placeinfo($u){
        $id=$this->detect->data->id;
+       $locationID=\App\places::where("id", $id)->get()->first()->locations_id;
        $data=\App\places::where("id", $id)->get()->first();
        $text="<a href=\"$data->pic\">&#8205;</a>\n ".
              "place:". $data->place."\n";
@@ -131,7 +132,7 @@ class makanyab extends Magazine{
         'message_id'=>$u->callback_query->message->message_id,
         'text'=>$text ,
         'parse_mode'=>'html',
-        'reply_markup'=> $this->plcinfokey(),
+        'reply_markup'=>view('plcinfokey',['locationID'=>$locationID,'id'=>$id])->render(),
         
         ]);
       $send();

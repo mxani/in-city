@@ -3,37 +3,37 @@
     
         [
             {
-                "text":"ویرایش نام مکان",
+                "text":"📍ویرایش نام مکان",
                 "callback_data":"{!! interlink(["path"=>"editeplc@editeplace"])!!}"
             },
             {
-                "text":"ویرایش تلفن",
+                "text":"☎️ویرایش تلفن",
                 "callback_data":"{!! interlink(["path"=>"editeplc@editephone"])!!}"
             }
         ],
         [ 
             {
-                "text":"ویرایش آدرس",
+                "text":"📝ویرایش آدرس",
                 "callback_data":"{!! interlink(["path"=>"editeplc@editeadress"])!!}"
             },
             {
-                "text":"ویرایش وب",
+                "text":"🌐ویرایش وب",
                 "callback_data":"{!! interlink(["path"=>"editeplc@editeweb"])!!}"
             }
         ],
         [ 
             {
-                "text":"ویرایش عکس",
+                "text":"🖼ویرایش عکس",
                 "callback_data":"{!! interlink(["path"=>"editeplc@editepic"])!!}"
             },
             {
-                "text":"ویرایش محله و دسته",
+                "text":"🏙ویرایش محله و دسته",
                 "callback_data":"{!! interlink(["path"=>"sabtemakan@local"])!!}"
             }
         ],
         [ 
             {
-                "text":"بازگشت",
+                "text":"⏩بازگشت",
                 "callback_data":"{!! interlink(["path"=>"start@showMenu"])!!}"
             }
         ]
