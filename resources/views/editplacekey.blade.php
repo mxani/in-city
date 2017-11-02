@@ -34,7 +34,7 @@
         [ 
             {
                 "text":"بازگشت",
-                "callback_data":"{!! interlink(["path"=>"sabtemakan@local"])!!}"
+                "callback_data":"{!! interlink(["path"=>"start@showMenu"])!!}"
             }
         ]
    

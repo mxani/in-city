@@ -48,7 +48,7 @@ class makanyab extends Magazine{
             else{
                
                $this->local();
-              // unset($this->meet["cat"]);
+            
             }
          }
          else{
@@ -64,7 +64,7 @@ class makanyab extends Magazine{
         $send=new editMessageText([
             'chat_id'=>$this->update->callback_query->message->chat->id,
             'message_id'=>$this->update->callback_query->message->message_id,
-            'text'=> "کجا می خوای بگردی "."\n".implode("->",$this->meet["cat"]),
+            'text'=> "کجا می خوای بگردی "."\n".implode("<code> » </code>",$this->meet["cat"]),
             'parse_mode'=>'html',
             'reply_markup'=> $this->localkey(),
             ]);
@@ -98,7 +98,7 @@ class makanyab extends Magazine{
         $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,
                 'message_id'=>$u->callback_query->message->message_id,
-                'text'=> "مکان های مورد نظر شما".implode("->",$this->meet["cat"])."\n"." محله:  " .$location,
+                'text'=> "مکان های مورد نظر شما".implode("<code> » </code>",$this->meet["cat"])."\n"." محله:  " .$location,
                 'parse_mode'=>'html',
                 'reply_markup'=> $this->lastplckey($maxzan),
                 ]);
@@ -107,13 +107,14 @@ class makanyab extends Magazine{
   
     }
     public function notfound(){ 
-
+        $locationID=\App\places::where("id",$this->detect->data->id)->get()->first()->locations_id;//baraye blade ezafe shod
+        $lastid=$this->detect->data->lastid??0;//baraye blade ezafe shod
          $send=new editMessageText([
             'chat_id'=>$this->update->callback_query->message->chat->id,
             'message_id'=>$this->update->callback_query->message->message_id,
             'text'=>"چنین موردی وجود ندارد " ,
             'parse_mode'=>'html',
-            'reply_markup'=>$this->kaygnsix(),
+            'reply_markup'=>view('backkey',['locationID'=>$locationID,'lastid'=>$lastid])->render(),
             ] );
         $send();
       
@@ -145,6 +146,8 @@ class makanyab extends Magazine{
             
         }
         else{
+        $locationID=\App\places::where("id",$this->detect->data->id)->get()->first()->locations_id;//baraye blade ezafe shod
+        $lastid=$this->detect->data->lastid??0;//baraye blade ezafe shod
         $data=\App\places::where("id", $id)->get()->first();
         $location=\App\locations::where("id",  $data->locations_id)->get()->first();
         $categori=\App\categories::where("id",  $data->parentID)->get()->first();
@@ -160,7 +163,7 @@ class makanyab extends Magazine{
          'message_id'=>$u->callback_query->message->message_id,
          'text'=>$text ,
          'parse_mode'=>'html',
-         'reply_markup'=> $this->kaygnsix(),
+         'reply_markup'=>view('backkey',['locationID'=>$locationID,'lastid'=>$lastid])->render(),
          
          ]);
          $send();
@@ -194,13 +197,14 @@ class makanyab extends Magazine{
             }
       }
           if ($x>5){
-        
+            $locationID=\App\places::where("id",$this->detect->data->id)->get()->first()->locations_id;//baraye blade ezafe shod
+            $lastid=$this->detect->data->lastid??0;//baraye blade ezafe shod
             $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,
                 'message_id'=>$this->update->callback_query->message->message_id,
                 'text'=>"شما بیش از 20 بار از این قابلیت استفاده کرده اید " ,
                 'parse_mode'=>'html',
-                'reply_markup'=> $this->kaygnsix(),
+                'reply_markup'=>view('backkey',['locationID'=>$locationID,'lastid'=>$lastid])->render(),
                 ] );
                 $send();
                $this->meet["limite"]="yes";
@@ -538,53 +542,53 @@ class makanyab extends Magazine{
         return json_encode(["inline_keyboard"=> $keys ]);
     }
 
-    public function kaygnsix(){
+    // public function kaygnsix(){
    
-        $id=$this->detect->data->id;
-        $locationID=\App\places::where("id", $id=$this->detect->data->id)->get()->first()->locations_id;
-        $keys[]=[
+    //     $id=$this->detect->data->id;
+    //     $locationID=\App\places::where("id", $id=$this->detect->data->id)->get()->first()->locations_id;
+    //     $keys[]=[
         
-            [
+    //         [
         
-        "text"=>"back to first menue",
-        "callback_data"=>interlink([
-            "text"=>"back",
-            "path"=>"makanyab@makanemoredenazar", 
-            "id"=>0,
-        ])
-        ],
-        ];
-        if (!empty($this->detect->data->lastid)){
-        $keys[]=[
-        [
+    //     "text"=>"back to first menue",
+    //     "callback_data"=>interlink([
+    //         "text"=>"back",
+    //         "path"=>"makanyab@makanemoredenazar", 
+    //         "id"=>0,
+    //     ])
+    //     ],
+    //     ];
+    //     if (!empty($this->detect->data->lastid)){
+    //     $keys[]=[
+    //     [
             
-            "text"=>"back",
-            "callback_data"=>interlink([
-                "path"=>"makanyab@local",
-                "id"=>$this->meet["lastid"],
-                 "text"=>"b",
+    //         "text"=>"back",
+    //         "callback_data"=>interlink([
+    //             "path"=>"makanyab@local",
+    //             "id"=>$this->meet["lastid"],
+    //              "text"=>"b",
                 
-            ])
-            ],   
-        ];
-         }
-        else{
-            $keys[]=[
-                [
+    //         ])
+    //         ],   
+    //     ];
+    //      }
+    //     else{
+    //         $keys[]=[
+    //             [
                     
-                    "text"=>"back",
-                    "callback_data"=>interlink([
-                        "path"=>"makanyab@lastplace",
-                        "text"=>"b",
-                        "loc"=>$locationID,
-                        "cor"=>"1",
-                    ])
-                ],   
-            ];
+    //                 "text"=>"back",
+    //                 "callback_data"=>interlink([
+    //                     "path"=>"makanyab@lastplace",
+    //                     "text"=>"b",
+    //                     "loc"=>$locationID,
+    //                     "cor"=>"1",
+    //                 ])
+    //             ],   
+    //         ];
         
-        }    
+    //     }    
     
-         return json_encode(["inline_keyboard"=> $keys ]);
-    }
+    //      return json_encode(["inline_keyboard"=> $keys ]);
+    // }
                     
 } 

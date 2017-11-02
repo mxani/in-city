@@ -50,10 +50,8 @@ class sabtemakan extends Magazine
             $j=$this->detect->data->id;
         }
         
-        $catserch=\App\categories::where("parentID",$j)->get()->toArray();//dd($catserch[1]['Category']);
+        $catserch=\App\categories::where("parentID",$j)->get()->toArray();
         $count=count($catserch);
-   //     $data=\App\categories::get();
-    //    $parentID=\App\categories::pluck('parentID')->toArray();
         $id=$this->detect->data->id;
         if (!empty($catserch)||!empty($this->detect->data->from)) {
            
@@ -141,7 +139,7 @@ class sabtemakan extends Magazine
                 ] ),
             ] );
             $send();
-           // if (!$u->message->text=="ندارد"){
+           
             $this->meet["placename"]=4;//}
         }
     }
@@ -200,35 +198,6 @@ class sabtemakan extends Magazine
                 unset($this->meet["placename"]);
             }
             }
-
-
-    public function catkey()
-    {
-        $keys=[];
-        $data=\App\categories::get();
-        $parentID=\App\categories::pluck('parentID')->toArray();
-        if (!empty($this->detect->data->from)) {
-            $j=0;
-        } else {
-            $j=$this->detect->data->id;
-        }
-        for ($i=0; $i<count($data); $i++) {
-            if ($parentID[$i]==$j) {
-                $keys[]=[
-                    [
-                        "text"=>$data[$i]->Category,
-                        "callback_data"=>interlink([
-                            "id"=>$data[$i]->id,
-                            "path"=>"sabtemakan@regplace",
-                        ])
-                    ]
-                ];
-            }
-        }
-       
-        return json_encode(["inline_keyboard"=> $keys ]);
-    }
-
 
 }
 
