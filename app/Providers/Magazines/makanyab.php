@@ -61,15 +61,20 @@ class makanyab extends Magazine{
 
     public function local(){ 
        
+        $count=\App\locations::count();
+        $id=$this->detect->data->id;
+        $parentID=\App\categories::find($id)->parentID;
+        $leftover=$count%3;
+         
         $send=new editMessageText([
             'chat_id'=>$this->update->callback_query->message->chat->id,
             'message_id'=>$this->update->callback_query->message->message_id,
             'text'=> "کجا می خوای بگردی "."\n".implode("<code> » </code>",$this->meet["cat"]),
             'parse_mode'=>'html',
-            'reply_markup'=> $this->localkey(),
+            'reply_markup'=>$a=view('makanyabLocKey',['count'=>$count,'id'=>$id,'parentID'=>$parentID,'leftover'=>$leftover])->render(),
             ]);
         $send();
-         
+         dd($a);
     }
 
     public function lastplace($u){  
@@ -100,9 +105,9 @@ class makanyab extends Magazine{
                 'message_id'=>$u->callback_query->message->message_id,
                 'text'=> "مکان های مورد نظر شما".implode("<code> » </code>",$this->meet["cat"])."\n"." محله:  " .$location,
                 'parse_mode'=>'html',
-                'reply_markup'=> $this->lastplckey($maxzan),
+                'reply_markup'=>$a= view('lastplacekey',['maxzan'=>$maxzan])->render(),
                 ]);
-            $send();
+            $send();dd($a);
        }
   
     }
@@ -398,150 +403,109 @@ class makanyab extends Magazine{
         
     }
 
-    public function lastplckey($maxzan){
-        if(count($maxzan)%2==1){   
-            for($r=0;$r<count($maxzan)-2;$r+=2){
+    // public function lastplckey($maxzan){
+    //     if(count($maxzan)%2==1){   
+    //         for($r=0;$r<count($maxzan)-2;$r+=2){
                 
-                        $keys[]=[
-                            [
-                    "text"=>$maxzan[$r]['place'],
-                    "callback_data"=>interlink([
-                        "id"=>$maxzan[$r]['id'],
-                        "path"=>"makanyab@placeinfo",
+    //                     $keys[]=[
+    //                         [
+    //                 "text"=>$maxzan[$r]['place'],
+    //                 "callback_data"=>interlink([
+    //                     "id"=>$maxzan[$r]['id'],
+    //                     "path"=>"makanyab@placeinfo",
                         
-                    ])
-                    ],
-                    [
-                        "text"=>$maxzan[$r+1]['place'],
-                        "callback_data"=>interlink([
-                            "id"=>$maxzan[$r+1]['id'],
-                            "path"=>"makanyab@placeinfo",
+    //                 ])
+    //                 ],
+    //                 [
+    //                     "text"=>$maxzan[$r+1]['place'],
+    //                     "callback_data"=>interlink([
+    //                         "id"=>$maxzan[$r+1]['id'],
+    //                         "path"=>"makanyab@placeinfo",
                             
-                        ])
-                        ]
-                            ];  
-                    } 
+    //                     ])
+    //                     ]
+    //                         ];  
+    //                 } 
 
-                    $keys[]=[
-                    [
-                    "text"=>end($maxzan)['place'],
-                    "callback_data"=>interlink([
-                        "id"=>end($maxzan)['id'],
-                        "path"=>"makanyab@placeinfo",
+    //                 $keys[]=[
+    //                 [
+    //                 "text"=>end($maxzan)['place'],
+    //                 "callback_data"=>interlink([
+    //                     "id"=>end($maxzan)['id'],
+    //                     "path"=>"makanyab@placeinfo",
                     
-                    ])
-                    ]
-                ]; 
-                    $keys[]=[
-                        [
+    //                 ])
+    //                 ]
+    //             ]; 
+    //                 $keys[]=[
+    //                     [
                     
-                    "text"=>"back to first menue",
-                    "callback_data"=>interlink([
-                        "text"=>"back",
-                        "path"=>"makanyab@makanemoredenazar", 
-                        "id"=>0,
-                    ])
-                    ],
-                    [
+    //                 "text"=>"back to first menue",
+    //                 "callback_data"=>interlink([
+    //                     "text"=>"back",
+    //                     "path"=>"makanyab@makanemoredenazar", 
+    //                     "id"=>0,
+    //                 ])
+    //                 ],
+    //                 [
                         
-                        "text"=>"back",
-                        "callback_data"=>interlink([
-                            "path"=>"makanyab@local",
-                            "id"=>$maxzan[0]['parentID'],
-                             "text"=>"b",
-                        ])
-                        ],   
-                    ];
-                }
-        if(count($maxzan)%2==0){
-            for($r=0;$r<count($maxzan)-1;$r+=2){
+    //                     "text"=>"back",
+    //                     "callback_data"=>interlink([
+    //                         "path"=>"makanyab@local",
+    //                         "id"=>$maxzan[0]['parentID'],
+    //                          "text"=>"b",
+    //                     ])
+    //                     ],   
+    //                 ];
+    //             }
+    //     if(count($maxzan)%2==0){
+    //         for($r=0;$r<count($maxzan)-1;$r+=2){
                 
-                    $keys[]=[
-                        [
-                        "text"=>$maxzan[$r]['place'],
-                        "callback_data"=>interlink([
-                            "id"=>$maxzan[$r]['id'],
-                            "path"=>"makanyab@placeinfo",
+    //                 $keys[]=[
+    //                     [
+    //                     "text"=>$maxzan[$r]['place'],
+    //                     "callback_data"=>interlink([
+    //                         "id"=>$maxzan[$r]['id'],
+    //                         "path"=>"makanyab@placeinfo",
                         
-                        ])
-                        ],
-                        [
-                            "text"=>$maxzan[$r+1]['place'],
-                            "callback_data"=>interlink([
-                                "id"=>$maxzan[$r+1]['id'],
-                                "path"=>"makanyab@placeinfo",
+    //                     ])
+    //                     ],
+    //                     [
+    //                         "text"=>$maxzan[$r+1]['place'],
+    //                         "callback_data"=>interlink([
+    //                             "id"=>$maxzan[$r+1]['id'],
+    //                             "path"=>"makanyab@placeinfo",
                             
-                            ])
-                            ]
-                            ];  
-                    } 
-                    $keys[]=[
-                        [
+    //                         ])
+    //                         ]
+    //                         ];  
+    //                 } 
+    //                 $keys[]=[
+    //                     [
                     
-                    "text"=>"back to first menue",
-                    "callback_data"=>interlink([
-                        "text"=>"back",
-                        "path"=>"makanyab@makanemoredenazar",
-                        "id"=>0, 
-                    ])
-                    ],
-                    [
+    //                 "text"=>"back to first menue",
+    //                 "callback_data"=>interlink([
+    //                     "text"=>"back",
+    //                     "path"=>"makanyab@makanemoredenazar",
+    //                     "id"=>0, 
+    //                 ])
+    //                 ],
+    //                 [
                         
-                        "text"=>"back",
-                        "callback_data"=>interlink([
-                            "path"=>"makanyab@local",
-                            "id"=>$maxzan[0]['parentID'],
-                             "text"=>"b",
-                        ])
-                        ],   
-                    ];
+    //                     "text"=>"back",
+    //                     "callback_data"=>interlink([
+    //                         "path"=>"makanyab@local",
+    //                         "id"=>$maxzan[0]['parentID'],
+    //                          "text"=>"b",
+    //                     ])
+    //                     ],   
+    //                 ];
 
-           } 
+    //        } 
            
-     return json_encode(["inline_keyboard"=> $keys ]);
+    //  return json_encode(["inline_keyboard"=> $keys ]);
       
-    }
-
-    public function plcinfokey(){
-        $id=$this->detect->data->id;
-        $locationID=\App\places::where("id", $id)->get()->first()->locations_id;
-        $keys[]=[
-            [
-                "text"=>"contact info",
-                "callback_data"=>interlink([
-                    "id"=>$id,
-                    "path"=>"makanyab@contactinfo", 
-            
-            ])
-            ]
-        ];
-    
-        $keys[]=[
-            [
-        
-        "text"=>"back to first menue",
-        "callback_data"=>interlink([
-            "text"=>"back",
-            "path"=>"makanyab@makanemoredenazar", 
-            "id"=>0,
-        ])
-        ],
-        
-        [
-            
-            "text"=>"back",
-            "callback_data"=>interlink([
-                "path"=>"makanyab@lastplace",
-                "text"=>"b",
-                "loc"=>$locationID,
-                "cor"=>"1",
-            ])
-            ],   
-        ];
-    
-    
-        return json_encode(["inline_keyboard"=> $keys ]);
-    }
+  //  }
 
     // public function kaygnsix(){
    
