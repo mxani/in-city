@@ -4,41 +4,41 @@
   @if(($i<$count-2&&$leftover==2)||($i<$count-1&&$leftover==1)||($leftover==0))
         [
                 {
-                    "text":"{{\App\locations::find($i+3)->local]}}",
-                    "callback_data":"{{ interlink(["id"=>\App\locations::find($i+3)->id,"path"=>"makanyab@lastplace", "lastid"=>$this->detect->data->id])}}"
+                    "text":"{{\App\locations::find($i+3)->local}}",
+                    "callback_data":"{{ interlink(["id"=>\App\locations::find($i+3)->id,"path"=>"makanyab@lastplace", "lastid"=>$lastid])}}"
                 },
                 {
                     "text":"{{\App\locations::find($i+2)->local}}",
-                    "callback_data":"{{ interlink(["id"=\App\locations::find($i+2)->id,"path"=>"makanyab@lastplace", "lastid"=>$this->detect->data->id])}}"
+                    "callback_data":"{{ interlink(["id"=>\App\locations::find($i+2)->id,"path"=>"makanyab@lastplace", "lastid"=>$lastid])}}"
                 }, 
                 {
                     "text":"{{\App\locations::find($i+1)->local}}",
-                    "callback_data":"{{ interlink(["id"=\App\locations::find($i+1)->id,"path"=>"makanyab@lastplace", "lastid"=>$this->detect->data->id])}}"
+                    "callback_data":"{{ interlink(["id"=>\App\locations::find($i+1)->id,"path"=>"makanyab@lastplace", "lastid"=>$lastid])}}"
                 }
             ],
   @endif
   @if($leftover==1&&$i==$count-1)
-      ,[
+     [
                 {
-                    "text":"{{\App\locations::find($i+1)->local]}}",
-                    "callback_data":"{{ interlink(["id"=>\App\locations::find($i+1)->id,"path"=>"makanyab@lastplace", "lastid"=>$this->detect->data->id])}}"
+                    "text":"{{\App\locations::find($i+1)->local}}",
+                    "callback_data":"{{ interlink(["id"=>\App\locations::find($i+1)->id,"path"=>"makanyab@lastplace", "lastid"=>$lastid])}}"
                 }
-        ]
+        ],
   @endif
   @if($leftover==21&&$i==$count-2)
-      ,[
+       [
                 {
-                    "text":"{{\App\locations::find($i+1)->local]}}",
-                    "callback_data":"{{ interlink(["id"=>\App\locations::find($i+1)->id,"path"=>"makanyab@lastplace", "lastid"=>$this->detect->data->id])}}"
+                    "text":"{{\App\locations::find($i+1)->local}}",
+                    "callback_data":"{{ interlink(["id"=>\App\locations::find($i+1)->id,"path"=>"makanyab@lastplace", "lastid"=>$lastid])}}"
                 },
                  {
-                    "text":"{{\App\locations::find($i+2)->local]}}",
-                    "callback_data":"{{ interlink(["id"=>\App\locations::find($i+2)->id,"path"=>"makanyab@lastplace", "lastid"=>$this->detect->data->id])}}"
+                    "text":"{{\App\locations::find($i+2)->local}}",
+                    "callback_data":"{{ interlink(["id"=>\App\locations::find($i+2)->id,"path"=>"makanyab@lastplace", "lastid"=>$lastid])}}"
                 }
-        ]
+        ],
   @endif
   @endfor
-   ,[ 
+    [ 
         {
                 "text":"بازگشت به منواصلی",
                 "callback_data":"{!! interlink(["text"=>"back","path"=>"makanyab@makanemoredenazar","id"=>0])!!}"

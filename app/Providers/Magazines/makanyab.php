@@ -11,12 +11,20 @@ class makanyab extends Magazine{
 
     public function makanemoredenazar(){
 
+        if ($this->detect->type=='callback_query') {
+            $j=$this->detect->data->id;
+          }
+          else { 
+            $j=0;
+          }
+        $catserch=\App\categories::where("parentID",$j)->get();
+        $parentID=\App\categories::find($j)->parentID??0;
         $send=sendMessage::class;
         $message=[
             'chat_id'=>$this->detect->from->id,
             'text'=>" دنبال چی  می گردی",
             'parse_mode'=>'html',
-            'reply_markup'=> $this->catkey(), 
+            'reply_markup'=>$a=view('makanyabCatKey',['j'=>$j,'catserch'=>$catserch,'parentID'=>$parentID])->render(),
          ];
 
        if($this->detect->type=='callback_query'){
@@ -43,7 +51,7 @@ class makanyab extends Magazine{
             if (!empty(\App\categories::where("parentID",$id)->first())) {
                 $send=editMessageText::class;
                 $send= new $send($message);
-                $send();
+                $send();dd($a);
             }
             else{
                
@@ -54,7 +62,7 @@ class makanyab extends Magazine{
          else{
             $messege['text']= " دنبال چی  می گردی";
             $send= new $send($message);
-            $send();
+            $send();dd($a);
          }
 
     }
@@ -62,6 +70,7 @@ class makanyab extends Magazine{
     public function local(){ 
        
         $count=\App\locations::count();
+        $lastid=$this->detect->data->id;
         $id=$this->detect->data->id;
         $parentID=\App\categories::find($id)->parentID;
         $leftover=$count%3;
@@ -71,10 +80,10 @@ class makanyab extends Magazine{
             'message_id'=>$this->update->callback_query->message->message_id,
             'text'=> "کجا می خوای بگردی "."\n".implode("<code> » </code>",$this->meet["cat"]),
             'parse_mode'=>'html',
-            'reply_markup'=>$a=view('makanyabLocKey',['count'=>$count,'id'=>$id,'parentID'=>$parentID,'leftover'=>$leftover])->render(),
+            'reply_markup'=>view('makanyabLocKey',['count'=>$count,'parentID'=>$parentID,'lastid'=>$lastid,'leftover'=>$leftover])->render(),
             ]);
         $send();
-         dd($a);
+        
     }
 
     public function lastplace($u){  
@@ -105,9 +114,9 @@ class makanyab extends Magazine{
                 'message_id'=>$u->callback_query->message->message_id,
                 'text'=> "مکان های مورد نظر شما".implode("<code> » </code>",$this->meet["cat"])."\n"." محله:  " .$location,
                 'parse_mode'=>'html',
-                'reply_markup'=>$a= view('lastplacekey',['maxzan'=>$maxzan])->render(),
+                'reply_markup'=>view('lastplacekey',['maxzan'=>$maxzan])->render(),
                 ]);
-            $send();dd($a);
+            $send();
        }
   
     }
@@ -230,7 +239,7 @@ class makanyab extends Magazine{
         }
         $catserch=\App\categories::where("parentID",$j)->get();
         for($i=0;$i<count($catserch);$i+=2){ 
-           $this->meet["i"]=$i;
+           //$this->meet["i"]=$i;
             if(count($catserch)%2==0){
                 $keys[]=[
                     [
@@ -307,101 +316,101 @@ class makanyab extends Magazine{
         
     }
     
-    public function localkey(){
+    // public function localkey(){
 
-        $count=\App\locations::count();
-        $keys=[];
-        $id=$this->detect->data->id;
-        $parentID=\App\categories::find($id)->parentID;
-        $a=[];
-        $leftover=$count%3;
-            for($i=0;$i<$count;$i+=3){ 
-                if(($i<$count-2&&$leftover==2)||($i<$count-1&&$leftover==1)||($leftover==0)){   
-                $keys[]=[
-                    [
-                        "text"=>\App\locations::find($i+3)->local,
-                        "callback_data"=>interlink([
-                            "id"=>\App\locations::find($i+3)->id,
-                            "path"=>"makanyab@lastplace",
-                            "lastid"=>$this->detect->data->id
-                        ])
-                    ],
-                    [
-                        "text"=>\App\locations::find($i+2)->local,
-                        "callback_data"=>interlink([
-                            "id"=>\App\locations::find($i+2)->id,
-                            "path"=>"makanyab@lastplace",
-                            "lastid"=>$this->detect->data->id
-                        ])
-                    ],
-                    [
-                        "text"=>\App\locations::find($i+1)->local,
-                        "callback_data"=>interlink([
-                            "id"=>\App\locations::find($i+1)->id,
-                            "path"=>"makanyab@lastplace",
-                            "lastid"=>$this->detect->data->id
-                        ])
-                    ]
+    //     $count=\App\locations::count();
+    //     $keys=[];
+    //     $id=$this->detect->data->id;
+    //     $parentID=\App\categories::find($id)->parentID;
+    //     $a=[];
+    //     $leftover=$count%3;
+    //         for($i=0;$i<$count;$i+=3){ 
+    //             if(($i<$count-2&&$leftover==2)||($i<$count-1&&$leftover==1)||($leftover==0)){   
+    //             $keys[]=[
+    //                 [
+    //                     "text"=>\App\locations::find($i+3)->local,
+    //                     "callback_data"=>interlink([
+    //                         "id"=>\App\locations::find($i+3)->id,
+    //                         "path"=>"makanyab@lastplace",
+    //                         "lastid"=>$this->detect->data->id
+    //                     ])
+    //                 ],
+    //                 [
+    //                     "text"=>\App\locations::find($i+2)->local,
+    //                     "callback_data"=>interlink([
+    //                         "id"=>\App\locations::find($i+2)->id,
+    //                         "path"=>"makanyab@lastplace",
+    //                         "lastid"=>$this->detect->data->id
+    //                     ])
+    //                 ],
+    //                 [
+    //                     "text"=>\App\locations::find($i+1)->local,
+    //                     "callback_data"=>interlink([
+    //                         "id"=>\App\locations::find($i+1)->id,
+    //                         "path"=>"makanyab@lastplace",
+    //                         "lastid"=>$this->detect->data->id
+    //                     ])
+    //                 ]
                     
-                ];  
-                }
-                if($leftover==1&&$i==$count-1){
-                    $keys[]=[
-                        [
-                            "text"=>\App\locations::find($i+1)->local,
-                            "callback_data"=>interlink([
-                                "id"=>\App\locations::find($i+1)->id,
-                                "path"=>"makanyab@lastplace",
-                                "lastid"=>$this->detect->data->id
-                            ])
-                        ]
-                            ];
-                }
-                if($leftover==2&&$i==$count-2){   
-                    $keys[]=[
-                        [
-                            "text"=>\App\locations::find($i+1)->local,
-                            "callback_data"=>interlink([
-                                "id"=>\App\locations::find($i+1)->id,
-                                "path"=>"makanyab@lastplace",
-                                "lastid"=>$this->detect->data->id
-                            ])
-                            ],
-                            [
-                                "text"=>\App\locations::find($i+2)->local,
-                                "callback_data"=>interlink([
-                                    "id"=>\App\locations::find($i+2)->id,
-                                    "path"=>"makanyab@lastplace",
-                                    "lastid"=>$this->detect->data->id
-                                ])
-                            ]
-                            ];
+    //             ];  
+    //             }
+    //             if($leftover==1&&$i==$count-1){
+    //                 $keys[]=[
+    //                     [
+    //                         "text"=>\App\locations::find($i+1)->local,
+    //                         "callback_data"=>interlink([
+    //                             "id"=>\App\locations::find($i+1)->id,
+    //                             "path"=>"makanyab@lastplace",
+    //                             "lastid"=>$this->detect->data->id
+    //                         ])
+    //                     ]
+    //                         ];
+    //             }
+    //             if($leftover==2&&$i==$count-2){   
+    //                 $keys[]=[
+    //                     [
+    //                         "text"=>\App\locations::find($i+1)->local,
+    //                         "callback_data"=>interlink([
+    //                             "id"=>\App\locations::find($i+1)->id,
+    //                             "path"=>"makanyab@lastplace",
+    //                             "lastid"=>$this->detect->data->id
+    //                         ])
+    //                         ],
+    //                         [
+    //                             "text"=>\App\locations::find($i+2)->local,
+    //                             "callback_data"=>interlink([
+    //                                 "id"=>\App\locations::find($i+2)->id,
+    //                                 "path"=>"makanyab@lastplace",
+    //                                 "lastid"=>$this->detect->data->id
+    //                             ])
+    //                         ]
+    //                         ];
 
-                }
-        }
-        $keys[]=[
-            [
+    //             }
+    //     }
+    //     $keys[]=[
+    //         [
         
-        "text"=>"back to first",
-        "callback_data"=>interlink([
-            "text"=>"back",
-            "path"=>"makanyab@makanemoredenazar", 
-            "id"=>0,
-        ])
-        ],
-        [
+    //     "text"=>"back to first",
+    //     "callback_data"=>interlink([
+    //         "text"=>"back",
+    //         "path"=>"makanyab@makanemoredenazar", 
+    //         "id"=>0,
+    //     ])
+    //     ],
+    //     [
             
-            "text"=>"back",
-            "callback_data"=>interlink([
-                "path"=>"makanyab@makanemoredenazar",
-                "id"=>$parentID,
-                "text"=>"b",
-            ])
-            ],
-        ];
-        return json_encode(["inline_keyboard"=> $keys ]);
+    //         "text"=>"back",
+    //         "callback_data"=>interlink([
+    //             "path"=>"makanyab@makanemoredenazar",
+    //             "id"=>$parentID,
+    //             "text"=>"b",
+    //         ])
+    //         ],
+    //     ];
+    //     return json_encode(["inline_keyboard"=> $keys ]);
         
-    }
+    // }
 
     // public function lastplckey($maxzan){
     //     if(count($maxzan)%2==1){   
