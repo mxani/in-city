@@ -13,9 +13,9 @@ class start extends Magazine {
 
 	public function showMenu( $u ) {
 		unset($this->meet["cat"]);
-		unset($this->meet["placename"]);
+		unset($this->meet["placename"]);//unset meet for that when program sterted this variabel be empty
 		if (empty($this->update->message->chat->id))
-        { 
+        { //if click on back botunm the type is callback query for this create top "if" 
 	        $send = new sendMessage( [
 			'chat_id'=>$this->update->callback_query->message->chat->id,
             'message_id'=>$this->update->callback_query->message->message_id,
@@ -69,6 +69,7 @@ class start extends Magazine {
 	   }
 	}
 	public function registerplace( $u ){
+		//this cartrige for that programm detect register place or edite place mode
 		unset($this->meet["editplc"]);
 		unset($this->meet["placename"]);
 		$user_id=$this->update->message->chat->id;
@@ -76,7 +77,6 @@ class start extends Magazine {
 		$serch=array_search($user_id,$dbuser);
 		
 		if ($serch===false&&$serch!==0){
-		$data=\App\regplaceUser::get();
 		$dbuser=\App\regplaceUser::pluck('user_id')->toArray();
 		$send = new sendMessage( [
 			'chat_id'      => $u->message->chat->id,

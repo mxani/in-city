@@ -1,6 +1,7 @@
 <?php
 use XB\theory\Shoot;
 use XB\telegramMethods\sendMessage;
+//this program has 4 magazin and one route file.it has for serch place 
 
 $this->trigger(function(&$u){
     return !empty($u->message->text) && $u->message->text=='/start';
