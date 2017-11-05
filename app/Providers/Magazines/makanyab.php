@@ -1,5 +1,24 @@
 <?php
+/**
+*tuqom-bot.php 
+*author:m.ahmadi
+*creation date:1396.7.11
+*last modification date:1396.8.15
+*version:1.0.0
+*purpose of program:this program is a telegram bot .
+*this help to find place that you want.this bot contain 3 main part:
+*1-serch place 2-register place 3- edite place
+*user step by step select between keys the categori that he serchs it
+*at last Is shown the place that user serched 
+*there are two limitaion:1-the user can show 10 time place info 2-the user can register one place
+*change history:change word by word serch to select between category
+*add register &edite place property
+*optimization the program (select by where() form DB isted get())
+*make keys in blade mode 
+*add emogies and create better gui
+*Dependencies:mysql serveic(6DB must migrate),telegram app,bizinehrud lib
 
+*/
 namespace App\Magazines;
 use App\places;
 use XB\theory\Magazine;
@@ -107,7 +126,7 @@ class makanyab extends Magazine{
         else{
                 $id=$this->detect->data->id;
             }   
-       $location=\App\locations::find($id)->local;//dd($location);  
+       $location=\App\locations::find($id)->local; 
 
         $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,

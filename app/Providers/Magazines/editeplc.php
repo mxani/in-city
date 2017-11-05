@@ -13,7 +13,7 @@ class editeplc extends Magazine
     public function editeplcinfo()
     {
         $this->meet["editplc"]=1;
-        //this meet for  declear that refrenced from here 
+        //>this meet for  declear that refrenced from here 
         if (empty($this->update->message->chat->id))
         {
             $user_id=$this->update->callback_query->message->chat->id;
@@ -68,7 +68,7 @@ class editeplc extends Magazine
         ] );
         $send();
         $this->meet["fndcart"]=1;
-        //this meet decleare next step has whitch  carteige .in the routs this Issue clear.
+        //>this meet decleare next step has whitch  carteige .in the routs this Issue clear.
     }
 
     public function editephone()
@@ -119,7 +119,7 @@ class editeplc extends Magazine
         $send();
         $this->meet["fndcart"]=5;
     }
-//top cartrige has for show message to user and The following cartridges are for the information that the user has entered 
+//>top cartrige has for show message to user and The following cartridges are for the information that the user has entered 
     public function todbplc()
     {
         $user_id=$this->update->message->chat->id;
