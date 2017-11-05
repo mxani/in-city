@@ -126,7 +126,7 @@ class makanyab extends Magazine{
          $send=new editMessageText([
             'chat_id'=>$this->update->callback_query->message->chat->id,
             'message_id'=>$this->update->callback_query->message->message_id,
-            'text'=>"چنین موردی وجود ندارد " ,
+            'text'=>"❌چنین موردی وجود ندارد❌ " ,
             'parse_mode'=>'html',
             'reply_markup'=>view('backkey',['locationID'=>$locationID,'lastid'=>$lastid])->render(),
             ] );
@@ -139,7 +139,7 @@ class makanyab extends Magazine{
        $locationID=\App\places::where("id", $id)->get()->first()->locations_id;
        $data=\App\places::where("id", $id)->get()->first();
        $text="<a href=\"$data->pic\">&#8205;</a>\n ".
-             "place:". $data->place."\n";
+             "📍نام مکان:". $data->place."\n";
           
        $send=new editMessageText([
         'chat_id'=>$this->update->callback_query->message->chat->id,
@@ -167,12 +167,12 @@ class makanyab extends Magazine{
         $location=\App\locations::where("id",  $data->locations_id)->get()->first();
         $categori=\App\categories::where("id",  $data->parentID)->get()->first();
         $text="<a href=\"$data->pic\">&#8205;</a>\n ".
-               "مکان:". $data->place."\n".
-               "تلفن تماس:".$data->phone."\n".
-               "ادرس:".$data->adress."\n".
-               "صفحه وب".$data->webpage."\n".   
-               "دسته:".$categori->Category."\n".
-               "محله:".$location->local."\n";
+              "📍"."مکان:". $data->place."\n".
+              "☎️"."تلفن تماس:".$data->phone."\n".
+              "📝"."ادرس:".$data->adress."\n".
+              "🌐"."صفحه وب".$data->webpage."\n".   
+              "📌"."دسته:".$categori->Category."\n".
+              "🏙". "محله:".$location->local."\n";
         $send=new editMessageText([
          'chat_id'=>$this->update->callback_query->message->chat->id,
          'message_id'=>$u->callback_query->message->message_id,
@@ -217,7 +217,7 @@ class makanyab extends Magazine{
             $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,
                 'message_id'=>$this->update->callback_query->message->message_id,
-                'text'=>"شما بیش از 20 بار از این قابلیت استفاده کرده اید " ,
+                'text'=>"❌شما بیش از 20 بار از این قابلیت استفاده کرده اید❌" ,
                 'parse_mode'=>'html',
                 'reply_markup'=>view('backkey',['locationID'=>$locationID,'lastid'=>$lastid])->render(),
                 ] );

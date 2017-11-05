@@ -22,7 +22,7 @@ class sabtemakan extends Magazine
         $send=new editMessageText([
             'chat_id'=>$this->update->callback_query->message->chat->id,
             'message_id'=>$this->update->callback_query->message->message_id,
-               'text'=> "مکانی که می خوای ثبت کنی کجاهاست؟ ",
+               'text'=> "⭕️مکانی که می خوای ثبت کنی کجاهاست؟❗️",
                'parse_mode'=>'html',
                'reply_markup'=>view('locationkey',['data'=>$data,'local'=>$local])->render(),
                ]);
@@ -31,7 +31,7 @@ class sabtemakan extends Magazine
          else{
             $send=new sendMessage([
                 'chat_id'=>$this->update->message->chat->id,
-                   'text'=> "مکانی که می خوای ثبت کنی کجاهاست؟ ",
+                   'text'=> "⭕️مکانی که می خوای ثبت کنی کجاهاست؟❗️ ",
                    'parse_mode'=>'html',
                    'reply_markup'=>view('locationkey',['data'=>$data,'local'=>$local])->render(),
                    ]);
@@ -58,7 +58,7 @@ class sabtemakan extends Magazine
             $send=new editMessageText([
             'chat_id'=>$this->update->callback_query->message->chat->id,
             'message_id'=>$this->update->callback_query->message->message_id,
-            'text'=>"مکان مورد نظر شما در کدام دسته جای دارد ",
+            'text'=>"💢مکان مورد نظر شما در کدام دسته جای دارد❗️",
             'parse_mode'=>'html',
             'reply_markup'=>view('categorykey',['catserch'=>$catserch,'count'=>$count])->render(),
             ]);
@@ -79,7 +79,7 @@ class sabtemakan extends Magazine
             $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,
                 'message_id'=>$this->update->callback_query->message->message_id,
-                'text'=>"نام مکان مورد نظر خود را وارد کنید ",
+                'text'=>"🖊نام مکان مورد نظر خود را وارد کنید ",
                 'parse_mode'=>'html',
                 
                 ]);
@@ -96,7 +96,7 @@ class sabtemakan extends Magazine
             $this->meet["recorde[1]"]=$u->message->text;
             $send=new sendMessage([
             'chat_id'=>$this->update->message->chat->id,
-            'text'=>  "شماره تلفن  {$this->meet["recorde[1]"]}   را وارد کنید  ",
+            'text'=>  "☎️شماره تلفن  {$this->meet["recorde[1]"]}   را وارد کنید  ",
             'parse_mode'=>'html',
        
             ]);
@@ -112,7 +112,7 @@ class sabtemakan extends Magazine
             $this->meet["recorde[2]"]=$u->message->text;
              $send=new sendMessage([
               'chat_id'=>$this->update->message->chat->id,
-              'text'=> "آدرس  {$this->meet["recorde[1]"]}  واردکنید",
+              'text'=> "📝آدرس  {$this->meet["recorde[1]"]}  واردکنید",
               'parse_mode'=>'html',
              
               ]);
@@ -127,11 +127,11 @@ class sabtemakan extends Magazine
             $this->meet["recorde[3]"]=$u->message->text;
                 $send=new sendMessage([
                 'chat_id'=>$this->update->message->chat->id,
-                'text'=> "درصورتی  {$this->meet["recorde[1]"]}  آدرس سایت یا کانال تلگرام دارد. وارد کنید  ",
+                'text'=> "🤖درصورتی  {$this->meet["recorde[1]"]}  آدرس سایت یا کانال تلگرام دارد. وارد کنید  ",
                 'parse_mode'=>'html',
                 'reply_markup' => json_encode( [
                     'keyboard'  => [
-                         [ 'ندارد' ],
+                         [ '❌ندارد' ],
                     
                     ],
                     'resize_keyboard'   => true,
@@ -148,19 +148,19 @@ class sabtemakan extends Magazine
 
         if($this->meet["placename"]==4){
             $this->meet["recorde[4]"]=$u->message->text;     
-            $text="اطلاعات وارد شده شما به شرح زیر است :"."\n".
-            "place:".$this->meet["recorde[1]"]."\n".
-            "phone:".$this->meet["recorde[2]"]."\n".
-            "adress:".$this->meet["recorde[3]"]."\n".
-            "webpage:".$this->meet["recorde[4]"];
+            $text="اطلاعات وارد شده شما به شرح زیر است :"."\n"."\n".
+            "🏢نام مکان:".$this->meet["recorde[1]"]."\n"."\n".
+            "☎️شماره تلفن:".$this->meet["recorde[2]"]."\n"."\n".
+            "📝آدرس:".$this->meet["recorde[3]"]."\n"."\n".
+            "🌐صفحه وب:".$this->meet["recorde[4]"]."\n";
             $send=new sendMessage([
                 'chat_id'=>$this->update->message->chat->id,
                 'text'=> $text,
                 'parse_mode'=>'html',
                 'reply_markup' => json_encode( [
                     'keyboard'  => [
-                         [ 'تایید اطلاعات' ],
-                         [ 'برگشت به مرحله اول' ],
+                         [ '✅تایید اطلاعات' ],
+                         [ '⏩برگشت به مرحله اول' ],
                     ],
                     'resize_keyboard'   => true,
                     'one_time_keyboard' => true,
@@ -172,16 +172,16 @@ class sabtemakan extends Magazine
     public function Confirmation($u)
             {
                 $user_id=$this->update->message->chat->id;
-                if ($u->message->text=='تایید اطلاعات'){
+                if ($u->message->text=='✅تایید اطلاعات'){
                 $send=new sendMessage([
                     'chat_id'=>$this->update->message->chat->id,
-                    'text'=> "مکان شما با موفقیت ثبت شد .با تشکر از همکاری شما عزییییییزم",
+                    'text'=> "مکان شما با موفقیت ثبت شد✅با تشکر از همکاری شما🌸🌼",
                     'parse_mode'=>'html',
                     'reply_markup' =>  json_encode( [
                         'keyboard'          => [
-                             [ 'جستجو مکان' ],
-                             [ 'مکان من'],
-                            [ 'درباره ربات' ],
+                             [ '🔎جستجو مکان' ],
+                             [ '📍مکان من'],
+                            [ '🤖درباره ربات' ],
                         ],
                         'resize_keyboard'   => true,
                         'one_time_keyboard' => true,

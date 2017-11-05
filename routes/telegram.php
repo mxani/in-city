@@ -7,38 +7,38 @@ $this->trigger(function(&$u){
 },'start@showMenu');
 
 $this->trigger(function(&$u){	
-    return !empty($u->message->text) && $u->message->text=='درباره ربات';
+    return !empty($u->message->text) && $u->message->text=='🤖درباره ربات';
 },'start@aboutUs');
 
 $this->trigger(function(&$u){
-if(!empty($u->message->text) && $u->message->text=='جستجو مکان'){
+if(!empty($u->message->text) && $u->message->text=='🔎جستجو مکان'){
 unset($this->meet['cat']);
 }
-    return !empty($u->message->text) && $u->message->text=='جستجو مکان';
+    return !empty($u->message->text) && $u->message->text=='🔎جستجو مکان';
 },'makanyab@makanemoredenazar');
 
 $this->trigger(function(&$u){	
-    return !empty($u->message->text) && $u->message->text=='مکان من';
+    return !empty($u->message->text) && $u->message->text=='📍مکان من';
 },'start@registerplace');
 
 $this->trigger(function(&$u){	
-    return !empty($u->message->text) && $u->message->text=='ثبت مکان من' ;
+    return !empty($u->message->text) && $u->message->text=='📝ثبت مکان من' ;
 },'sabtemakan@local');
 
 $this->trigger(function(&$u){
-    return !empty($u->message->text) && $u->message->text=='بازگشت';
+    return !empty($u->message->text) && $u->message->text=='▶️بازگشت';
 },'start@showMenu');
 
 $this->trigger(function(&$u){
-    return !empty($u->message->text) && $u->message->text=='ندارد';
+    return !empty($u->message->text) && $u->message->text=='❌ندارد';
 },'sabtemakan@webpagereg');
 
 $this->trigger(function(&$u){
-    return !empty($u->message->text) && $u->message->text=='برگشت به مرحله اول';
+    return !empty($u->message->text) && $u->message->text=='⏩برگشت به مرحله اول';
 },'start@showMenu');
 
 $this->trigger(function(&$u){
-    return !empty($u->message->text) && $u->message->text=='ویرایش مکان من';
+    return !empty($u->message->text) && $u->message->text=='📝ویرایش مکان من' ;
 },'editeplc@editeplcinfo');
 
 

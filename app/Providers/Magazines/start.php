@@ -19,13 +19,13 @@ class start extends Magazine {
 	        $send = new sendMessage( [
 			'chat_id'=>$this->update->callback_query->message->chat->id,
             'message_id'=>$this->update->callback_query->message->message_id,
-			'text'         => "کاربر گرامی خوش آمدید",
+			'text'         => "🌺🌼🌸کاربر گرامی خوش آمدید🌺🌼🌸",
 			'parse_mode'   => 'html',
 			'reply_markup' => json_encode( [
 				'keyboard'          => [
-					 [ 'جستجو مکان' ],
-					 [ 'مکان من'],
-					[ 'درباره ربات' ],
+					 [ '🔎جستجو مکان' ],
+					 [ '📍مکان من'],
+					[ '🤖درباره ربات' ],
 				],
 				'resize_keyboard'   => true,
 				'one_time_keyboard' => true,
@@ -50,13 +50,13 @@ class start extends Magazine {
 
 		$send = new sendMessage( [
 			'chat_id'      => $u->message->chat->id,
-			'text'         => "کاربر گرامی " . $u->message->from->first_name . " عزیز خوش آمدید.",
+			'text'         => "🌺🌼🌸کاربر گرامی " . $u->message->from->first_name . " عزیز خوش آمدید.🌺🌼🌸",
 			'parse_mode'   => 'html',
 			'reply_markup' => json_encode( [
 				'keyboard'          => [
-					 [ 'جستجو مکان' ],
-					 [ 'مکان من'],
-					[ 'درباره ربات' ],
+					 [ '🔎جستجو مکان' ],
+					 [ '📍مکان من'],
+					[ '🤖درباره ربات' ],
 				],
 				'resize_keyboard'   => true,
 				'one_time_keyboard' => true,
@@ -80,13 +80,13 @@ class start extends Magazine {
 		$dbuser=\App\regplaceUser::pluck('user_id')->toArray();
 		$send = new sendMessage( [
 			'chat_id'      => $u->message->chat->id,
-			'text'         => "یکی رو انتخاب کن",
+			'text'         => "یکی رو انتخاب کن؟❗️",
 			'parse_mode'   => 'html',
 			'reply_markup' => json_encode( [
 				'keyboard'          => [
 					
-					 [ 'ثبت مکان من' ],
-					[ 'بازگشت' ],
+					 [ '📝ثبت مکان من' ],
+					[ '▶️بازگشت' ],
 				],
 				'resize_keyboard'   => true,
 				'one_time_keyboard' => true,
@@ -100,13 +100,13 @@ class start extends Magazine {
 	else{
 		$send = new sendMessage( [
 			'chat_id'      => $u->message->chat->id,
-			'text'         => "یکی رو انتخاب کن",
+			'text'         => "یکی رو انتخاب کن؟❗️",
 			'parse_mode'   => 'html',
 			'reply_markup' => json_encode( [
 				'keyboard'          => [
 					
-					 [ 'ویرایش مکان من' ],
-					[ 'بازگشت' ],
+					 [ '📝ویرایش مکان من' ],
+					[ '▶️بازگشت' ],
 				],
 				'resize_keyboard'   => true,
 				'one_time_keyboard' => true,
