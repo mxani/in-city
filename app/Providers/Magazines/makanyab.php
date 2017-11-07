@@ -1,22 +1,22 @@
 <?php
 /**
-*tuqom-bot.php 
-*author:m.ahmadi
-*creation date:1396.7.11
-*last modification date:1396.8.15
-*version:1.0.0
-*purpose of program:this program is a telegram bot .
-*this help to find place that you want.this bot contain 3 main part:
-*1-serch place 2-register place 3- edite place
-*user step by step select between keys the categori that he serchs it
-*at last Is shown the place that user serched 
-*there are two limitaion:1-the user can show 10 time place info 2-the user can register one place
-*change history:change word by word serch to select between category
-*add register &edite place property
-*optimization the program (select by where() form DB isted get())
-*make keys in blade mode 
-*add emogies and create better gui
-*Dependencies:mysql serveic(6DB must migrate),telegram app,bizinehrud lib
+* tuqom-bot.php 
+* @author:m.ahmadi
+* @creation date:1396.7.11
+* @last modification date:1396.8.15
+* @version:1.0.0
+* @purpose of program:this program is a telegram bot .
+* this help to find place that you want.this bot contain 3 main part:
+* 1-serch place 2-register place 3- edite place
+* user step by step select between keys the categori that he serchs it
+* at last Is shown the place that user serched 
+* there are two limitaion:1-the user can show 10 time place info 2-the user can register one place
+* @change history:change word by word serch to select between category
+* add register &edite place property
+* optimization the program (select by where() form DB isted get())
+* make keys in blade mode 
+* add emogies and create better gui
+* @Dependencies:mysql serveic(6DB must migrate),telegram app,bizinehrud lib
 
 */
 namespace App\Magazines;
@@ -29,13 +29,28 @@ use XB\telegramMethods\editMessageReplyMarkup;
 class makanyab extends Magazine{
 
     public function makanemoredenazar(){
-
-        if ($this->detect->type=='callback_query') {
+    /**
+     * makanemoredenazar
+     * 
+     * this function show frist from when click to جستجور مکان key 
+     * and genrate categorys key 
+     * 
+     * @param (string) ($catserch) find id that Submitted by clicked key's callback_data 
+     * @param (string) ($parentID) find parentID that Submitted by clicked key's callback_data 
+     * @param (integer) ($j) get clicked keys id 
+     * @param (meet)   (cat) contain categoris name and shown top of the send message
+     */
+        if ($this->detect->type=='callback_query')
+        {
+            /**
+             * this "if" for that detect is the request(جستجو مکان) frist time run or 
+             * category selected
+             */
             $j=$this->detect->data->id;
-          }
-          else { 
+        }
+        else { 
             $j=0;
-          }
+        }
         $catserch=\App\categories::where("parentID",$j)->get();
         $parentID=\App\categories::find($j)->parentID??0;
         $send=sendMessage::class;
@@ -44,56 +59,82 @@ class makanyab extends Magazine{
             'text'=>"دنبال چی  می گردی❗️",
             'parse_mode'=>'html',
             'reply_markup'=>view('makanyabCatKey',['j'=>$j,'catserch'=>$catserch,'parentID'=>$parentID])->render(),
-         ];
+        ];
 
-       if($this->detect->type=='callback_query'){
+        if($this->detect->type=='callback_query')
+        {
             $id=$this->detect->data->id;
             $this->meet["cat"][0]="🔆دسته ها";
-            if(!empty($this->detect->data->text)&&$this->detect->data->text=="b"){
+            if(!empty($this->detect->data->text)&&$this->detect->data->text=="b")
+            {
             
                 array_pop($this->meet["cat"]);
+                //>when click back botunm must be delted last item in array meet["cat"]
                 $message['text']="دنبال چی  می گردی❗️"."\n".implode("<code> » </code>",$this->meet["cat"]);
             }
-            else{
-                if ($id!=0){  
+            else
+            {
+                if ($id!=0)
+                {  
                     $cat=\App\categories::find($id)->Category;
                     array_push($this->meet["cat"],$cat);
+                    //>add new category name to meet["cat]
                     $message['text']="دنبال چی می گردی❗️️️️"."\n".implode("<code> » </code>",$this->meet["cat"]);
                 }
-                else{
+                else
+                {
                     unset($this->meet["cat"]);
+                    //>in the frist menue there isnot category then must unset "cat"
                 }
             }
 
             $message['message_id']=$this->update->callback_query->message->message_id;
           
-            if (!empty(\App\categories::where("parentID",$id)->first())) {
+            if (!empty(\App\categories::where("parentID",$id)->first())) 
+            {
+                //>this if decleare that is this category last category ?
                 $send=editMessageText::class;
                 $send= new $send($message);
                 $send();
             }
-            else{
+            else
+            {
                
                $this->local();
             
             }
-         }
-         else{
+        }
+        else
+        {
             $messege['text']=  "دنبال چی می گردی❗️";
             $send= new $send($message);
             $send();
-         }
+        }
 
     }
 
     public function local(){ 
-       
+       /** local
+        * this function for show & generate locatin keys 
+        *
+        *@param (string) (lastid) save last category id and stay on callback_data mean in evry 
+        *location key is last category id 
+        */ 
+
         $count=\App\locations::count();
+        //>this @param is sent to view
         $lastid=$this->detect->data->id;
+        //>this @param is sent to view
         $id=$this->detect->data->id;
         $parentID=\App\categories::find($id)->parentID;
+        //>this @param is sent to view
         $leftover=$count%3;
-         
+         /** @param (integer) (leftover) in here we want create 3 columns so gain lafte over 
+          * this param is sent to view
+          * if left over is 0 we have complet 3 columns
+          *if left over is 1 we have complet 3 cloumns and one left over
+          *if left over is 2 we have complet 3 cloumns and two left over
+         */
         $send=new editMessageText([
             'chat_id'=>$this->update->callback_query->message->chat->id,
             'message_id'=>$this->update->callback_query->message->message_id,
@@ -105,27 +146,38 @@ class makanyab extends Magazine{
         
     }
 
-    public function lastplace($u){  
+    public function lastplace($u)
+    {  
+        /** lastplace
+         * this function for show resullt the places finded
+         * 
+         * 
+         */
       
-       if (empty($this->detect->data->cor)){
-       $this->meet["lastid"]=$this->detect->data->lastid;}
-       $count=\App\places::count();        
-       $idplace=$this->meet["lastid"]; 
-       $dataplc=\App\places::find($idplace);
-       if (empty($this->detect->data->loc)){
-       $idlocation=$this->detect->data->id;}
-       else{$idlocation=$this->detect->data->loc;}
-       $maxzan=[];$finalplace=[];$keys=[];
-       $maxzan= \App\places::where('parentID',$idplace)->where('locations_id',$idlocation)->get()->toArray();
-       if(empty($maxzan)){
-          $this->notfound();
-                }
-       else{  
-         if(!empty($this->detect->data->text)&&$this->detect->data->text=="b"){
-             $id=$this->detect->data->loc;}
+       if (empty($this->detect->data->cor))
+       {
+           //>$this->detect->data->cor this when has value that clock on back botunm 
+        $this->meet["lastid"]=$this->detect->data->lastid;
+       }
+        $count=\App\places::count();        
+        $idplace=$this->meet["lastid"]; 
+        $dataplc=\App\places::find($idplace);
+        if (empty($this->detect->data->loc))
+        {
+            $idlocation=$this->detect->data->id;
+        }
+        else{$idlocation=$this->detect->data->loc;}
+        $maxzan=[];$finalplace=[];$keys=[];
+        $maxzan= \App\places::where('parentID',$idplace)->where('locations_id',$idlocation)->get()->toArray();
+        if(empty($maxzan)){
+            $this->notfound();
+        }
+        else{  
+        if(!empty($this->detect->data->text)&&$this->detect->data->text=="b"){
+            $id=$this->detect->data->loc;}
         else{
                 $id=$this->detect->data->id;
-            }   
+        }   
        $location=\App\locations::find($id)->local; 
 
         $send=new editMessageText([
