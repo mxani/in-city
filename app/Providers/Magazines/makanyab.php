@@ -156,7 +156,7 @@ class makanyab extends Magazine{
       
        if (empty($this->detect->data->cor))
        {
-           //>$this->detect->data->cor this when has value that clock on back botunm 
+           ///>$this->detect->data->cor this when has value that click on back botunm 
         $this->meet["lastid"]=$this->detect->data->lastid;
        }
         $count=\App\places::count();        
@@ -164,22 +164,29 @@ class makanyab extends Magazine{
         $dataplc=\App\places::find($idplace);
         if (empty($this->detect->data->loc))
         {
+           ///>$this->detect->data->loc this when has value that click on back botunm 
             $idlocation=$this->detect->data->id;
         }
         else{$idlocation=$this->detect->data->loc;}
         $maxzan=[];$finalplace=[];$keys=[];
         $maxzan= \App\places::where('parentID',$idplace)->where('locations_id',$idlocation)->get()->toArray();
+        ///>@param (array) ($maxzan) find items that have location_id & parentID that selected by user
         if(empty($maxzan)){
             $this->notfound();
+            ///>this function for error
         }
         else{  
         if(!empty($this->detect->data->text)&&$this->detect->data->text=="b"){
+            ///>this function for category and location that show top of the text message
             $id=$this->detect->data->loc;}
+            ///>@param ($id) for get location name
         else{
                 $id=$this->detect->data->id;
+                ///>when $this->detect->data->text=="b" is empty means this step is next step and dident click on back key
+                ///>so data->id is location id 
         }   
        $location=\App\locations::find($id)->local; 
-
+        ///>@param ($location) is value show on top of text message
         $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,
                 'message_id'=>$u->callback_query->message->message_id,
@@ -192,6 +199,9 @@ class makanyab extends Magazine{
   
     }
     public function notfound(){ 
+        /**
+        *this function run whene no item in category is error function
+        */
         $locationID=\App\places::where("id",$this->detect->data->id)->get()->first()->locations_id;//baraye blade ezafe shod
         $lastid=$this->detect->data->lastid??0;//baraye blade ezafe shod
          $send=new editMessageText([
@@ -206,6 +216,11 @@ class makanyab extends Magazine{
     }
 
     public function placeinfo($u){
+        /**
+        *this function for show summary of data to user 
+        *show this step just name place and pic and no limitation for this step
+        */
+
        $id=$this->detect->data->id;
        $locationID=\App\places::where("id", $id)->get()->first()->locations_id;
        $data=\App\places::where("id", $id)->get()->first();
@@ -225,15 +240,19 @@ class makanyab extends Magazine{
     }
 
     public function contactinfo ($u){
+        /**
+        *this function show all of data to user &have limitition
+        */
         $this->meet["correction"]="yes";
         $id=$this->detect->data->id;
         $this->timesUse($id); 
+        ///>here the program to the timeuse function to calcute times use user @arguman $id
         if (!empty($this->meet["limite"])&&$this->meet["limite"]=="yes"){
-            
+            ///>this function for whene the >meet["limite"]=="yes" &we want program did not run continu
         }
         else{
-        $locationID=\App\places::where("id",$this->detect->data->id)->get()->first()->locations_id;//baraye blade ezafe shod
-        $lastid=$this->detect->data->lastid??0;//baraye blade ezafe shod
+        $locationID=\App\places::where("id",$this->detect->data->id)->get()->first()->locations_id;
+        $lastid=$this->detect->data->lastid??0;
         $data=\App\places::where("id", $id)->get()->first();
         $location=\App\locations::where("id",  $data->locations_id)->get()->first();
         $categori=\App\categories::where("id",  $data->parentID)->get()->first();
@@ -259,16 +278,21 @@ class makanyab extends Magazine{
     }
 
     public function timesUse ($id){
-
+    /**
+    *this function for cacute how many user use db data 
+    *when user first time click the contact info the user_id's save in timeUse tabel in db
+    *then eche time click contact info save the user_id's whene time use mor than 5 the programe give erorr
+    */
          $user_id=$this->update->callback_query->message->chat->id;
          $count=\App\timesUse::count();
-         $data=\App\timesUse::get();
+       //  $data=\App\timesUse::get();
          $time=date('Y-m-d H:i:s');
+         ///>get time now 
          $y=0;$x=0;$maxzan=[];$i=0;
          $dbuser=\App\timesUse::pluck('user_id')->toArray();
          \App\timesUse::insert(
             ['user_id'=>$user_id,'placeID'=>$id,"created_at"=>$time]
-            );  
+            );  ///>insert user_id to db
             $maxzan=\App\timesUse::where('user_id', $user_id)->get(); 
             $arraymaxzan=$maxzan->pluck('created_at');
             foreach ($arraymaxzan as $value) {
@@ -276,15 +300,16 @@ class makanyab extends Magazine{
                 $i+=1;
             }
             $today=$maxzan->last()->created_at->timestamp;
-            $yeste=$today-(86400);  
+            ///>get last use timestamp
+            $yeste=$today-(86400);  ///>get yeterday timestamp and count between today and yeterday  how meny time used
             for($j=0;$j<count($arraymaxzan);$j++){
             if($arraymaxzan[$j]>$yeste&&$arraymaxzan[$j]<$today){
                 $x+=1;
             }
       }
           if ($x>5){
-            $locationID=\App\places::where("id",$this->detect->data->id)->get()->first()->locations_id;//baraye blade ezafe shod
-            $lastid=$this->detect->data->lastid??0;//baraye blade ezafe shod
+            $locationID=\App\places::where("id",$this->detect->data->id)->get()->first()->locations_id;///>added for blade
+            $lastid=$this->detect->data->lastid??0;///>added for blade
             $send=new editMessageText([
                 'chat_id'=>$this->update->callback_query->message->chat->id,
                 'message_id'=>$this->update->callback_query->message->message_id,
