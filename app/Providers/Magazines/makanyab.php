@@ -69,7 +69,7 @@ class makanyab extends Magazine{
             {
             
                 array_pop($this->meet["cat"]);
-                //>when click back botunm must be delted last item in array meet["cat"]
+                ///>when click back botunm must be delted last item in array meet["cat"]
                 $message['text']="دنبال چی  می گردی❗️"."\n".implode("<code> » </code>",$this->meet["cat"]);
             }
             else
@@ -78,13 +78,13 @@ class makanyab extends Magazine{
                 {  
                     $cat=\App\categories::find($id)->Category;
                     array_push($this->meet["cat"],$cat);
-                    //>add new category name to meet["cat]
+                    ///>add new category name to meet["cat]
                     $message['text']="دنبال چی می گردی❗️️️️"."\n".implode("<code> » </code>",$this->meet["cat"]);
                 }
                 else
                 {
                     unset($this->meet["cat"]);
-                    //>in the frist menue there isnot category then must unset "cat"
+                    ///>in the frist menue there isnot category then must unset "cat"
                 }
             }
 
@@ -92,7 +92,7 @@ class makanyab extends Magazine{
           
             if (!empty(\App\categories::where("parentID",$id)->first())) 
             {
-                //>this if decleare that is this category last category ?
+                ///>this if decleare that is this category last category ?
                 $send=editMessageText::class;
                 $send= new $send($message);
                 $send();
@@ -122,12 +122,12 @@ class makanyab extends Magazine{
         */ 
 
         $count=\App\locations::count();
-        //>this @param is sent to view
+        ///>this @param is sent to view
         $lastid=$this->detect->data->id;
-        //>this @param is sent to view
+        ///>this @param is sent to view
         $id=$this->detect->data->id;
         $parentID=\App\categories::find($id)->parentID;
-        //>this @param is sent to view
+        ///>this @param is sent to view
         $leftover=$count%3;
          /** @param (integer) (leftover) in here we want create 3 columns so gain lafte over 
           * this param is sent to view
