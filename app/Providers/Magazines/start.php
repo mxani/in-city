@@ -124,7 +124,7 @@ class start extends Magazine {
 		$send = new sendMessage( [
 			'chat_id'    => $u->message->chat->id,
 			'text'       => " ربات مکان یاب تو قم " .
-			                "\n نسخه 1.0.0" . "\n\n ارتباط با پشتیبانی : " ."@MasumeAhmadi\n@moctabaxani",
+			                "\n نسخه 1.0.0" . "\n\n ارتباط با پشتیبانی : " ."09351977673\n@moctabaxani",
 			'parse_mode' => 'html',
 		] );
 		if ( ! $send() ) {
