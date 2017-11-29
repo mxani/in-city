@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/msg/{data}', function ($data) {
+    $data= base64_decode($data);
+    $send= new \XB\telegramMethods\sendMessage(['chat_id'=>-1001128665890,'text'=>$data]);
+    $send();
+    return 'ok';
+});
