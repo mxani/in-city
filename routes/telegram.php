@@ -81,8 +81,7 @@ $this->trigger(function(&$u){
    },'editeplc@todbweb');
 
    $this->trigger(function(&$u){
-    $msg=$this->detect->msgtype??"";
-    return ("photo"==$msg||"document"==$msg) && !empty($this->meet["fndcart"]) && $this->meet["fndcart"]==5;
+    return ($this->meet["fndcart"]??-1)==5;
    },'editeplc@todbpic');
 
 if (!empty($this->detect->data->path)){

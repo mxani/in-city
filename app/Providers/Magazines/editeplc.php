@@ -7,6 +7,9 @@ use XB\theory\Magazine;
 use XB\telegramMethods\sendMessage;
 use XB\telegramMethods\editMessageText;
 use XB\telegramMethods\editMessageReplyMarkup;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\TransferException;
 
 class editeplc extends Magazine
 {
@@ -22,11 +25,10 @@ class editeplc extends Magazine
         {
             $user_id=$this->update->message->chat->id;
         }
-        $fake=\Faker\Factory::create('fa_IR');
         $serch=\App\places::where("user_id", $user_id)->get()->first();
         $location=\App\locations::where("id", $serch->locations_id)->get()->first();
         $categori=\App\categories::where("id", $serch->parentID)->get()->first();
-        $text="<a href=\"$fake->imageurl\">&#8205;</a>\n ".
+        $text="<a href=\"$serch->pic\">&#8205;</a>\n ".
         "مکان ثبت شده شما به شرح زیر است :"."\n".
         "🏢مکان:".$serch->place."\n".
         "☎️تلفن:".$serch->phone."\n".
@@ -165,13 +167,57 @@ class editeplc extends Magazine
 
     public function todbpic()
     {
+        if($this->detect->msgtype=='photo'){
+            $file = $this->update->message->photo;
+            $file = $file[count($file)-1];
+            $file_id = $file->file_id;
+        }else{
+            $message['chat_id'] = $this->detect->from->id;
+            $message['text'] = "لطفا فقط یک تصویر را با در نظر گرفتن حالت <code>فشرده (compress)</code> ارسال کنید";
+            $message['parse_mode'] = 'html';
+            (new sendMessage($message))->call();
+            return;
+        }
+
+        $newImage = $this->get_url($file_id);
         $user_id=$this->update->message->chat->id;
-         unset($this->meet["fndcart"]);
-         $pic=$this->update->message->photo[1]->file_id;
-         \App\places::
-         where('user_id',$user_id)
-         ->update(['pic'=>"$pic"]);
-         $this->editeplcinfo();
+        unset($this->meet["fndcart"]);
+        \App\places::where('user_id',$user_id)->update(['pic'=>"$newImage"]);
+        $this->editeplcinfo();
+    }
+
+    private function get_url($file_id)
+    {
+        $get =  new \XB\telegramMethods\getFile(['file_id'=>$file_id]);
+        $get();
+        if (empty($path = $get->result->file_path)) {
+            return false;
+        }
+        $url="https://api.telegram.org/file/bot".config('XBtelegram.bot-token')."/$path";
+       
+        $client = new Client();
+        try{
+            $response=$client->request(
+                'POST', 
+                'http://telerobotic.ir/gfftb2017.php', 
+                ['form_params' =>['fileUrl'=>$url,'tenantToken'=>'tuqom']]
+            );
+            $result = $response->getBody()->getContents();
+        } catch (ClientException $e) {
+            echo 'ClientException: '.$e->getMessage();
+            return false;
+        }catch (TransferException $e) {
+            echo 'TransferException: '.$e->getMessage();
+            return false;
+        }catch (\RuntimeException $e) {
+            echo 'RuntimeException: '.$e->getMessage();
+            return false;
+        }catch (\Exception $e) {
+            echo 'RuntimeException: '.$e->getMessage();
+            return false;
+        }
+
+        return $result;
     }
  
    

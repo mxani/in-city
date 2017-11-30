@@ -158,11 +158,11 @@ class sabtemakan extends Magazine
         if($this->meet["placename"]==4)
         {
             $this->meet["recorde[4]"]=$u->message->text;     
-            $text="اطلاعات وارد شده شما به شرح زیر است :"."\n"."\n".
-            "🏢نام مکان:".$this->meet["recorde[1]"]."\n"."\n".
-            "☎️شماره تلفن:".$this->meet["recorde[2]"]."\n"."\n".
-            "📝آدرس:".$this->meet["recorde[3]"]."\n"."\n".
-            "🌐صفحه وب:".$this->meet["recorde[4]"]."\n";
+            $text="اطلاعات وارد شده شما به شرح زیر است : "."\n"."\n".
+            "🏢نام مکان: ".$this->meet["recorde[1]"]."\n"."\n".
+            "☎️شماره تلفن: ".$this->meet["recorde[2]"]."\n"."\n".
+            "📝آدرس: ".$this->meet["recorde[3]"]."\n"."\n".
+            "🌐صفحه وب: ".$this->meet["recorde[4]"]."\n";
             $send=new sendMessage([
                 'chat_id'=>$this->update->message->chat->id,
                 'text'=> $text,

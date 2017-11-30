@@ -307,7 +307,7 @@ class makanyab extends Magazine{
                 $x+=1;
             }
       }
-          if ($x>5){
+          if ($x>30){
             $locationID=\App\places::where("id",$this->detect->data->id)->get()->first()->locations_id;///>added for blade
             $lastid=$this->detect->data->lastid??0;///>added for blade
             $send=new editMessageText([
