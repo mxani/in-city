@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\categories;
 
 class categoriesTableSeeder extends Seeder
 {
@@ -152,6 +153,7 @@ class categoriesTableSeeder extends Seeder
         $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"نمایشگاه اتومبیل"]);
         $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"کارواش"]);
         $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"لوازم یدکی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"پمپ بنزین و CNG"]);
     $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"اداری و دولتی"]);
         $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"ادارات"]);
             categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"دارایی"]);
