@@ -11,37 +11,175 @@ class categoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        $sardaste=["خرید","حمل و نقل","بهداشت و درمان","خدمات شهری","کافه رستوران","فرهنگی تفریحی ","زیبایی و تندرستی ","سلامت و درمان"];
-        $daste=["پوشاک","سوپرمارکت","قطار","تاکسی تلفنی","تجهیزات پزشکی","داروخانه","بانک","سینما",
-        "پمپ بنزین","حمل و نقل شهری","باربری","تاکسی بانوان","خدمات خودرو","سفر و گردشگری","آموزشگاه ","لوازم و تحریر",
-        "مراکز آموزش عالی","مدارس","مطب پزشکان","عطاری","داروخانه شبانه","بیمارستان","طب فیزیکی ","اسباب بازی",
-        "پارک","بوستان","اتاق کودک","سیسمونی","آهنگری","آهنگ سازی","تعمیرگاه","آموزشگاه زبان"
-        ,"خرازی","پارچه فروشی","دسمال فروشی","جهیزیه","لوازم خانگی","کامپیوتری","خدمات رایانه","فروش لپ تاپ","فروش موبایل","فروش تبلت",
-        "لوازم جانبی موبایل","مبل فروشی","عکاسی","آتلیه","فیلمبرداری","تالار","کافی شاپ","فست فود",
-        "پوشاک","سوپرمارکت","قطار","تاکسی تلفنی","تجهیزات پزشکی","داروخانه","بانک","سینما",
-        "پمپ بنزین","حمل و نقل شهری","باربری","تاکسی بانوان","خدمات خودرو","سفر و گردشگری","آموزشگاه ","لوازم و تحریر",
-        "مراکز آموزش عالی","مدارس","مطب پزشکان","عطاری","داروخانه شبانه","بیمارستان","طب فیزیکی ","اسباب بازی",
-        "پارک","بوستان","اتاق کودک","سیسمونی","آهنگری","آهنگ سازی","تعمیرگاه","آموزشگاه زبان"
-        ,"خرازی","پارچه فروشی","دسمال فروشی","جهیزیه","لوازم خانگی","کامپیوتری","خدمات رایانه","فروش لپ تاپ","فروش موبایل","فروش تبلت",
-        "لوازم جانبی موبایل","مبل فروشی","عکاسی","آتلیه","فیلمبرداری","تالار","کافی شاپ","فست فود"
-    ]; 
-      
-        $fake=\Faker\Factory::create('fa_IR');
-    	for ($i=0; $i <8; $i++) { 
-            $place=$sardaste[$i];
-	    	DB::table('categories')->insert([
-                'parentID'=>0,
-                'Category'=>$place,
-	        ]);
-        }
-        for ($i=9; $i <count($daste); $i++) { 
-            $place=$daste[$i-9];
-            DB::table('categories')->insert([
-                'parentID'=>rand(1,8),
-                'Category'=>$place,
-               
-            ]);
-        }
-       
-        }
+        $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"سلامت و بهداست"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"مراکز درمانی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"درمانگاهها"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"داروخانه"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"کلینیکها"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"بیمارستانها"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"آزمایشگاهها"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"فیزیوتراپی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"رادیولوژی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"سنوگرافی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"شنوایی سنجی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"بینایی سنجی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"کار درمانی و توانبخشی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"طب سوزنی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"جراحی بینی و زیبایی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"مشاوره روانشناسی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"ترک اعتیاد"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"مطب ها"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"دکتر اطفال"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"پزشک قلب"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"پزشک مغز و اعصاب"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"زنان و زایمان"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"روانپزشک"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"حلق گوش بینی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"دستگاه گوارش"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"پوست و مو"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"دندان پزشکی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"زیبایی و لاغری"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"مشاوره تغذیه"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"محصولات پزشکی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"عینک"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"لنز"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"سمعک"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"سایر"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"املاک و خدمات ساختمان "]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"مشاوره املاک"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"الکتریکی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"درب و پنجره"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"مصلح ساختمانی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"نقاشی ساختمان"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"لوازم ساختمان"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"تاسیسات"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"طراحی و معماری"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"کاغذ و دیواری"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"قالیشویی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"خدمات نظافتی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"سمپاشی"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"آموزش"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"دانشگاهها"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"هنرستان ها"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"مدارس "]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"زبان"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"سایر"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"حمل ونقل وسفر"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"آژانس تلفنی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"اتوبار"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"پیک موتوری"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"آژانس های مسافرتی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"هتل ها"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"هواپیما"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"پوشاک"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"بانوان"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"مزون و لباس عروس"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"مانتو"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"روسری"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"چادر"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"لباس مجلسی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>" سایر موارد"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"آقایان"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"کت وشلوار مجلسی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"اسپرت"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"سایر موارد"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"کودک"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"سیسمونی و نوزاد"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"کیف و کفش"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"کفش بانوان"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"کفش آقایان"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"لباس ورزشی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"پارچه و منسوجات"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"طلا و جواهرات"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"اغذیه"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"رستوران"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"کباب سرا"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"تهیه غذا"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"پیتزا و ساندویج"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"کافی و شاپ"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"سفره خانه"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"آبمیوه و بستنی"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"صنعتی وتجاری"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"صنایع و غذایی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"تولیدی پوشاک"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"مراکز پخش"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"چاپ و نظر"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"سایر"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"مراکز خرید"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"پاساژها"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"سمساری"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"لوازم خانگی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"دیجیتال و کامپیوتر"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"کامپیوتر و لب وتاپ"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"تبلت و موبایل"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"مداربسته دوربین های "]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"اینترنت"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"خدمات کامپیوتر"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"تعمیر و نگهداری پرینتر"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"تلوزیون"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"آیفون تصویری"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"مبلمان و سرویس خواب"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"فرش و پرده"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"محصولات شوینده و بهداشتی"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"زیبایی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"آرایش مردانه"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"آرایش زنانه"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"محصولات  آرایشی و زیبایی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"عطر و ادکلن"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"سرگرمی و ورزشی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"سینما"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"استخر"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"شهربازی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"باغ وحش"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"سالن های ورزشی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"سایر"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"تعمیرات و قطعات"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"تعمیرات آسانسور"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"خدمات پس از فروش"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"تعمیرات لوازم خانگی "]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"تعمیر مبل و لباس مبل"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"قطعات"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"موبایل و کامپیوتر"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"خودرو"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"نمایندگی ها"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"خدمات خودرو"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"مکانیکی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"سافکاری و نقاشس"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"باتری سازی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"تعویظ روغنی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"آپاراتی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"اجاره خودرو"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"نمایشگاه اتومبیل"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"کارواش"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"لوازم یدکی"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"اداری و دولتی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"ادارات"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"دارایی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"استانداری"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"فرمانداری"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"ثبت احوال"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"ثبت اسناد"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"تامین اجتماعی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"بهزیستی"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"دادگستری"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"نظام وظیفه"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"شهرداری"]);
+            categories::firstorcreate(['parentID'=>$p2->id,'Category'=>"بانکها و موسسات مالی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"بانکها و موسسات مالی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"حقوقی و قضایی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"حسابداری و حسابرسی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"بیمه"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"دفترخانه و ثبت اسناد"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"دفاتر پیشخوان دولت"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"پلیس +10"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"سایر"]);
+    $p1=categories::firstorcreate(['parentID'=>0,'Category'=>"مراسم و جشن"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"باغ و تالار"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"سفره عقد"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"اجرای موزیک"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"گل فروشی"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"ظروف کرایه"]);
+        $p2=categories::firstorcreate(['parentID'=>$p1->id,'Category'=>"آتلیه و عکاسی"]);
+    
     }
+}
